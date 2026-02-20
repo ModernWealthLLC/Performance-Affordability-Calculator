@@ -13,6 +13,8 @@ interface FormState {
   totalNetWorth: string;
   targetRetirementSpending: string;
   expectedReturn: string;
+  vehicleMake: string;
+  vehicleModel: string;
   purchasePrice: string;
   downPayment: string;
   interestRate: string;
@@ -33,6 +35,8 @@ const defaultState: FormState = {
   totalNetWorth: "350000",
   targetRetirementSpending: "80000",
   expectedReturn: "7",
+  vehicleMake: "",
+  vehicleModel: "",
   purchasePrice: "85000",
   downPayment: "20000",
   interestRate: "6.5",
@@ -95,7 +99,13 @@ export default function FinancialForm() {
   const [errors, setErrors] = useState<string[]>([]);
   const [showContactModal, setShowContactModal] = useState(false);
 
+  const textFields: (keyof FormState)[] = ["vehicleMake", "vehicleModel"];
+
   function handleChange(name: string, value: string) {
+    if (textFields.includes(name as keyof FormState)) {
+      setForm((prev) => ({ ...prev, [name]: value }));
+      return;
+    }
     const num = parseFloat(value);
     if (value !== "" && num < 0) return;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -105,6 +115,12 @@ export default function FinancialForm() {
     const errs: string[] = [];
     const entries = Object.entries(form) as [keyof FormState, string][];
     for (const [key, val] of entries) {
+      if (textFields.includes(key)) {
+        if (val.trim() === "") {
+          errs.push(`${key === "vehicleMake" ? "Vehicle Make" : "Vehicle Model"} is required.`);
+        }
+        continue;
+      }
       if (val === "" || isNaN(parseFloat(val))) {
         errs.push(`${key} is required and must be a number.`);
       }
@@ -226,6 +242,28 @@ export default function FinancialForm() {
               Vehicle Cost Profile
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-gray-500 mb-1.5">Make</label>
+                <input
+                  type="text"
+                  name="vehicleMake"
+                  value={form.vehicleMake}
+                  placeholder="e.g. Porsche"
+                  onChange={(e) => handleChange("vehicleMake", e.target.value)}
+                  className="input-field"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-500 mb-1.5">Model</label>
+                <input
+                  type="text"
+                  name="vehicleModel"
+                  value={form.vehicleModel}
+                  placeholder="e.g. 911 GT3"
+                  onChange={(e) => handleChange("vehicleModel", e.target.value)}
+                  className="input-field"
+                />
+              </div>
               <InputField
                 label="Purchase Price"
                 name="purchasePrice"

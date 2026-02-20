@@ -43,8 +43,12 @@ function ResultsContent() {
   const firstName = searchParams.get("firstName") || "";
   const lastName = searchParams.get("lastName") || "";
   const email = searchParams.get("email") || "";
+  const vehicleMake = searchParams.get("vehicleMake") || "";
+  const vehicleModel = searchParams.get("vehicleModel") || "";
 
   const results = calculate(personal, vehicle);
+
+  const vehicleLabel = [vehicleMake, vehicleModel].filter(Boolean).join(" ");
 
   return (
     <div>
@@ -54,7 +58,9 @@ function ResultsContent() {
             Your <span className="text-[#0f487f]">Results</span>
           </h2>
           <p className="text-gray-500">
-            Here&apos;s the true cost of your performance vehicle.
+            {vehicleLabel
+              ? `Here\u2019s the true cost of your ${vehicleLabel}.`
+              : "Here\u2019s the true cost of your performance vehicle."}
           </p>
         </div>
         <button
@@ -69,6 +75,8 @@ function ResultsContent() {
         firstName={firstName}
         lastName={lastName}
         email={email}
+        vehicleMake={vehicleMake}
+        vehicleModel={vehicleModel}
       />
     </div>
   );

@@ -11,6 +11,8 @@ interface ResultsDashboardProps {
   firstName: string;
   lastName: string;
   email: string;
+  vehicleMake: string;
+  vehicleModel: string;
 }
 
 function formatCurrency(value: number): string {
@@ -99,7 +101,10 @@ export default function ResultsDashboard({
   firstName,
   lastName,
   email,
+  vehicleMake,
+  vehicleModel,
 }: ResultsDashboardProps) {
+  const vehicleLabel = [vehicleMake, vehicleModel].filter(Boolean).join(" ");
   const handleDownloadPDF = useCallback(async () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -136,6 +141,15 @@ export default function ResultsDashboard({
             ? `Prepared for: ${fullName}`
             : email;
       doc.text(userLine, pageWidth / 2, y, { align: "center" });
+      y += 6;
+    }
+
+    // --- Vehicle Info ---
+    if (vehicleLabel) {
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Vehicle: ${vehicleLabel}`, pageWidth / 2, y, { align: "center" });
       y += 6;
     }
 
@@ -448,7 +462,7 @@ export default function ResultsDashboard({
         `Very few enthusiasts achieve a score at this level, and it reflects both thoughtful planning and a solid foundation of wealth-building habits.`;
 
       p2 =
-        `Your car-to-net-worth ratio of ${carNW}% is well within the recommended threshold of 10%, meaning this vehicle represents a modest fraction of your total wealth. ` +
+        `Your car-to-net-worth ratio of ${carNW}% is well within the 10% threshold commonly referenced in financial planning, meaning this vehicle represents a modest fraction of your total wealth. ` +
         `Your current savings rate of ${savRate}% demonstrates that you are consistently setting aside a meaningful portion of your income for long-term growth. ` +
         `The true annual cost of ownership is estimated at ${tac} when including depreciation, insurance, maintenance, and loan payments. This figure is comfortably absorbed by your financial profile without compromising your ability to invest and build wealth over time.`;
 
@@ -479,7 +493,7 @@ export default function ResultsDashboard({
         `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable trade-off, it is significant enough to warrant monitoring your total vehicle costs each year and ensuring they remain within comfortable bounds as your financial situation evolves.`;
 
       p4 =
-        `Our recommendation is to maintain your current trajectory while looking for opportunities to optimize, ${displayName}. ` +
+        `Based on these results, it may be worth maintaining your current trajectory while looking for opportunities to optimize, ${displayName}. ` +
         `Consider setting a strict annual vehicle cost budget that includes maintenance, insurance, and any track or modification expenses. ` +
         `If possible, look for ways to increase your savings rate by even a few percentage points. Small improvements compound significantly over time. ` +
         `You are in a good position overall, and a bit of extra financial discipline will help ensure this vehicle remains a source of enjoyment rather than financial stress.`;
@@ -501,7 +515,7 @@ export default function ResultsDashboard({
         `Every year of delay represents both lost portfolio growth and additional years of mandatory work before you can retire on your own terms.`;
 
       p4 =
-        `We recommend taking a hard look at the total cost picture, ${displayName}. Consider whether a less expensive vehicle, a shorter hold period, or a larger down payment could bring your Discipline Score into a healthier range. ` +
+        `It may be worth taking a hard look at the total cost picture, ${displayName}. Consider whether a less expensive vehicle, a shorter hold period, or a larger down payment could bring your Discipline Score into a healthier range. ` +
         `If this specific vehicle is important to you, focus on aggressively increasing your income or cutting other discretionary expenses to boost your savings rate. ` +
         `Even modest improvements, like saving an extra few hundred dollars per month, can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to your original goal.`;
     } else {
@@ -512,7 +526,7 @@ export default function ResultsDashboard({
         `It is important to review these findings carefully and consider whether adjustments are needed before committing to this vehicle.`;
 
       p2 =
-        `The financial metrics raise several concerns. Your car-to-net-worth ratio of ${carNW}% is well above the recommended 10% threshold, meaning a disproportionate share of your wealth is tied up in a rapidly depreciating asset. ` +
+        `The financial metrics raise several concerns. Your car-to-net-worth ratio of ${carNW}% is well above the 10% threshold commonly referenced in financial planning, meaning a disproportionate share of your wealth is tied up in a rapidly depreciating asset. ` +
         `Your savings rate has been reduced to ${savRate}%, which limits your ability to build the investment portfolio needed for financial independence. ` +
         `The true annual cost of ${tac} (including depreciation, insurance, maintenance, and loan payments) is consuming a large portion of your annual income and crowding out funds that could be directed toward savings and investments.`;
 
@@ -522,7 +536,7 @@ export default function ResultsDashboard({
         `The compounding effect of these lost investment years cannot easily be recovered once the time has passed.`;
 
       p4 =
-        `Our strong recommendation is to reassess this purchase, ${displayName}. Consider more affordable alternatives that still deliver an engaging driving experience but at a fraction of the total cost. ` +
+        `The data suggests it may be prudent to reassess this purchase, ${displayName}. Consider more affordable alternatives that still deliver an engaging driving experience but at a fraction of the total cost. ` +
         `If you are already committed to this vehicle, explore ways to offset the financial impact by increasing your income, dramatically reducing other expenses, or shortening your ownership period to minimize depreciation losses. ` +
         `The goal is not to abandon your passion for performance vehicles, but to ensure that your pursuit of that passion does not come at the expense of your financial freedom and long-term security.`;
     }
@@ -530,7 +544,7 @@ export default function ResultsDashboard({
     renderSection("Your Discipline Score", p1);
     renderSection("Your Financial Snapshot", p2);
     renderSection("The Long-Term Impact", p3);
-    renderSection("Our Recommendation", p4);
+    renderSection("Considerations", p4);
 
     // --- Page 2 Footer ---
     const footer2Y = 287;
@@ -637,7 +651,7 @@ export default function ResultsDashboard({
       ],
       [
         "Car-to-Net-Worth",
-        "The vehicle purchase price expressed as a percentage of your total net worth. Financial advisors generally recommend keeping this below 10%.",
+        "The vehicle purchase price expressed as a percentage of your total net worth. A common financial planning benchmark is to keep this below 10%.",
       ],
       [
         "Car-to-Investable Assets",
@@ -684,7 +698,7 @@ export default function ResultsDashboard({
     );
 
     doc.save("performance-affordability-report.pdf");
-  }, [results, firstName, lastName, email]);
+  }, [results, firstName, lastName, email, vehicleLabel]);
 
   return (
     <div className="space-y-8">
@@ -712,6 +726,14 @@ export default function ResultsDashboard({
         </button>
       </div>
 
+      {/* Vehicle label */}
+      {vehicleLabel && (
+        <div className="glass-panel p-4 flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-[#0f487f]" />
+          <span className="text-lg font-semibold text-gray-900">{vehicleLabel}</span>
+        </div>
+      )}
+
       {/* Top metric cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
@@ -719,8 +741,8 @@ export default function ResultsDashboard({
           value={`${results.carToNetWorthPercent.toFixed(1)}%`}
           sub={
             results.carToNetWorthPercent <= 10
-              ? "Within recommended range"
-              : "Above recommended range"
+              ? "Within target range"
+              : "Above target range"
           }
         />
         <StatCard
