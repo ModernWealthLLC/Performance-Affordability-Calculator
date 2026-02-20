@@ -16,9 +16,9 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
   const sweepAngle = percentage * totalAngle;
   const endAngle = startAngle + sweepAngle;
 
-  const radius = 80;
+  const radius = 70;
   const cx = 100;
-  const cy = 100;
+  const cy = 85;
 
   function polarToCartesian(angleDeg: number) {
     const rad = (angleDeg * Math.PI) / 180;
@@ -71,13 +71,13 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
           y={cy - 5}
           textAnchor="middle"
           className="fill-gray-900 text-4xl font-bold"
-          style={{ fontSize: "36px" }}
+          style={{ fontSize: "32px" }}
         >
           {clampedScore}
         </text>
         <text
           x={cx}
-          y={cy + 18}
+          y={cy + 16}
           textAnchor="middle"
           className="fill-gray-400"
           style={{ fontSize: "11px" }}
