@@ -86,7 +86,7 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
         </text>
       </svg>
       <div
-        className="mt-1 text-sm font-semibold px-3 py-1 rounded-full"
+        className="mt-3 text-sm font-semibold px-3 py-1 rounded-full"
         style={{ color, backgroundColor: `${color}15` }}
       >
         {category}
