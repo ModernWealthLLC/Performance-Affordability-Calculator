@@ -769,8 +769,8 @@ export default function ResultsDashboard({
 
       {/* Score + Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-panel card-hover p-8 flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold mb-4 text-gray-600">
+        <div className="glass-panel card-hover p-6 flex flex-col items-center justify-center">
+          <h3 className="text-lg font-semibold mb-3 text-gray-600">
             Discipline Score
           </h3>
           <ScoreGauge
@@ -779,8 +779,8 @@ export default function ResultsDashboard({
           />
         </div>
 
-        <div className="glass-panel card-hover p-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-600">
+        <div className="glass-panel card-hover p-6">
+          <h3 className="text-lg font-semibold mb-3 text-gray-600">
             Portfolio at Retirement
           </h3>
           <ComparisonChart
@@ -791,7 +791,7 @@ export default function ResultsDashboard({
       </div>
 
       {/* Detail breakdown */}
-      <div className="glass-panel card-hover p-8">
+      <div className="glass-panel card-hover p-6">
         <h3 className="text-lg font-semibold mb-6 text-gray-600 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#0f487f]" />
           Detailed Breakdown

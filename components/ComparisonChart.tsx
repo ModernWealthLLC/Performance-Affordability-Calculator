@@ -52,7 +52,7 @@ export default function ComparisonChart({
   const colors = ["#22c55e", "#ef4444"];
 
   return (
-    <div className="w-full h-72">
+    <div className="w-full h-60">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}

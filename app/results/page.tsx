@@ -55,7 +55,11 @@ function ResultsContent() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-3xl font-bold tracking-tight mb-1 text-gray-900">
-            Your <span className="text-[#0f487f]">Results</span>
+            {firstName ? (
+              <>{firstName}, here are your <span className="text-[#0f487f]">Results</span></>
+            ) : (
+              <>Your <span className="text-[#0f487f]">Results</span></>
+            )}
           </h2>
           <p className="text-gray-500">
             {vehicleLabel
