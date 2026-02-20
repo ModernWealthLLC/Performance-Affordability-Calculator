@@ -545,6 +545,12 @@ export default function ResultsDashboard({
     renderSection("Your Financial Snapshot", p2);
     renderSection("The Long-Term Impact", p3);
     renderSection("Considerations", p4);
+    renderSection(
+      "Disclaimer",
+      "Modern Wealth does not offer tax, legal, or accounting advice. The information provided here is purely for your understanding and should not be used as a basis for these topics. " +
+        "This Performance Affordability Report does not constitute any financial, tax, or legal advice. The Performance Affordability Report is for information purposes only. " +
+        "Consult with your tax, legal, and accounting advisors before acting on any advice or initiating any transaction."
+    );
 
     // --- Page 2 Footer ---
     const footer2Y = 287;
