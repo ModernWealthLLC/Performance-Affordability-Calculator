@@ -160,7 +160,7 @@ export default function ResultsDashboard({
       ["Savings Rate", `${results.savingsRate.toFixed(1)}%`],
       [
         "Discipline Score",
-        `${results.disciplineScore} / 100 — ${results.disciplineCategory}`,
+        `${results.disciplineScore} / 100 (${results.disciplineCategory})`,
       ],
     ];
 
@@ -442,7 +442,7 @@ export default function ResultsDashboard({
 
     if (scorePct >= 85) {
       p1 =
-        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category — the highest tier in our framework. ` +
+        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category, the highest tier in our framework. ` +
         `This exceptional result indicates that your performance vehicle purchase is very well aligned with your overall financial position. ` +
         `You have demonstrated a rare balance between pursuing your automotive passion and maintaining strong financial discipline. ` +
         `Very few enthusiasts achieve a score at this level, and it reflects both thoughtful planning and a solid foundation of wealth-building habits.`;
@@ -450,10 +450,10 @@ export default function ResultsDashboard({
       p2 =
         `Your car-to-net-worth ratio of ${carNW}% is well within the recommended threshold of 10%, meaning this vehicle represents a modest fraction of your total wealth. ` +
         `Your current savings rate of ${savRate}% demonstrates that you are consistently setting aside a meaningful portion of your income for long-term growth. ` +
-        `The true annual cost of ownership — ${tac} when including depreciation, insurance, maintenance, and loan payments — is comfortably absorbed by your financial profile without compromising your ability to invest and build wealth over time.`;
+        `The true annual cost of ownership is estimated at ${tac} when including depreciation, insurance, maintenance, and loan payments. This figure is comfortably absorbed by your financial profile without compromising your ability to invest and build wealth over time.`;
 
       p3 =
-        `Every major purchase carries an opportunity cost, and your vehicle is no exception. If the total cost of this car were invested instead, your portfolio at retirement could be ${fvNo} rather than ${fvWith} — a difference of ${fvDiff}. ` +
+        `Every major purchase carries an opportunity cost, and your vehicle is no exception. If the total cost of this car were invested instead, your portfolio at retirement could be ${fvNo} rather than ${fvWith}, a difference of ${fvDiff}. ` +
         `However, your financial independence timeline is only delayed by approximately ${fiDelay} years, which is a modest trade-off for the enjoyment and utility this vehicle provides. ` +
         `This minimal delay confirms that the purchase fits comfortably within your broader wealth-building plan.`;
 
@@ -475,13 +475,13 @@ export default function ResultsDashboard({
         `This is a real expense that deserves ongoing attention in your annual budget to make sure it does not creep higher over time.`;
 
       p3 =
-        `The opportunity cost of this vehicle is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your retirement portfolio could reach ${fvNo} compared to the projected ${fvWith} with the vehicle — a gap of ${fvDiff}. ` +
+        `The opportunity cost of this vehicle is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your retirement portfolio could reach ${fvNo} compared to the projected ${fvWith} with the vehicle, a gap of ${fvDiff}. ` +
         `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable trade-off, it is significant enough to warrant monitoring your total vehicle costs each year and ensuring they remain within comfortable bounds as your financial situation evolves.`;
 
       p4 =
         `Our recommendation is to maintain your current trajectory while looking for opportunities to optimize, ${displayName}. ` +
         `Consider setting a strict annual vehicle cost budget that includes maintenance, insurance, and any track or modification expenses. ` +
-        `If possible, look for ways to increase your savings rate by even a few percentage points — small improvements compound significantly over time. ` +
+        `If possible, look for ways to increase your savings rate by even a few percentage points. Small improvements compound significantly over time. ` +
         `You are in a good position overall, and a bit of extra financial discipline will help ensure this vehicle remains a source of enjoyment rather than financial stress.`;
     } else if (scorePct >= 50) {
       p1 =
@@ -492,18 +492,18 @@ export default function ResultsDashboard({
 
       p2 =
         `Your car-to-net-worth ratio of ${carNW}% indicates that a substantial share of your wealth is concentrated in this single depreciating asset. ` +
-        `Your savings rate of ${savRate}% is being compressed by the costs of ownership, and the true annual cost of ${tac} — which accounts for depreciation, insurance, maintenance, and loan payments — is consuming a meaningful portion of your annual income. ` +
+        `Your savings rate of ${savRate}% is being compressed by the costs of ownership, and the true annual cost of ${tac} (which accounts for depreciation, insurance, maintenance, and loan payments) is consuming a meaningful portion of your annual income. ` +
         `These metrics suggest that the vehicle is competing directly with your ability to build long-term financial security through consistent investment contributions.`;
 
       p3 =
-        `The opportunity cost paints a clear picture of the long-term trade-off. Without this vehicle, your projected retirement portfolio would be ${fvNo}, compared to ${fvWith} with it — a difference of ${fvDiff} in future wealth. ` +
+        `The opportunity cost paints a clear picture of the long-term trade-off. Without this vehicle, your projected retirement portfolio would be ${fvNo}, compared to ${fvWith} with it, a difference of ${fvDiff} in future wealth. ` +
         `Your financial independence is delayed by approximately ${fiDelay} years as a direct result. This is a significant gap that grows larger with time due to the compounding nature of investment returns. ` +
         `Every year of delay represents both lost portfolio growth and additional years of mandatory work before you can retire on your own terms.`;
 
       p4 =
         `We recommend taking a hard look at the total cost picture, ${displayName}. Consider whether a less expensive vehicle, a shorter hold period, or a larger down payment could bring your Discipline Score into a healthier range. ` +
         `If this specific vehicle is important to you, focus on aggressively increasing your income or cutting other discretionary expenses to boost your savings rate. ` +
-        `Even modest improvements — saving an extra few hundred dollars per month — can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to your original goal.`;
+        `Even modest improvements, like saving an extra few hundred dollars per month, can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to your original goal.`;
     } else {
       p1 =
         `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
@@ -514,16 +514,16 @@ export default function ResultsDashboard({
       p2 =
         `The financial metrics raise several concerns. Your car-to-net-worth ratio of ${carNW}% is well above the recommended 10% threshold, meaning a disproportionate share of your wealth is tied up in a rapidly depreciating asset. ` +
         `Your savings rate has been reduced to ${savRate}%, which limits your ability to build the investment portfolio needed for financial independence. ` +
-        `The true annual cost of ${tac} — including depreciation, insurance, maintenance, and loan payments — is consuming a large portion of your annual income and crowding out funds that could be directed toward savings and investments.`;
+        `The true annual cost of ${tac} (including depreciation, insurance, maintenance, and loan payments) is consuming a large portion of your annual income and crowding out funds that could be directed toward savings and investments.`;
 
       p3 =
-        `The long-term financial impact is substantial. Without this vehicle, your projected retirement portfolio would be ${fvNo}, but with the vehicle it drops to ${fvWith} — a reduction of ${fvDiff} in lifetime wealth. ` +
+        `The long-term financial impact is substantial. Without this vehicle, your projected retirement portfolio would be ${fvNo}, but with the vehicle it drops to ${fvWith}, a reduction of ${fvDiff} in lifetime wealth. ` +
         `Your path to financial independence is delayed by approximately ${fiDelay} years. This means additional years of mandatory work, reduced financial flexibility, and a significantly smaller safety net for unexpected life events. ` +
         `The compounding effect of these lost investment years cannot easily be recovered once the time has passed.`;
 
       p4 =
         `Our strong recommendation is to reassess this purchase, ${displayName}. Consider more affordable alternatives that still deliver an engaging driving experience but at a fraction of the total cost. ` +
-        `If you are already committed to this vehicle, explore ways to offset the financial impact — such as increasing your income, dramatically reducing other expenses, or shortening your ownership period to minimize depreciation losses. ` +
+        `If you are already committed to this vehicle, explore ways to offset the financial impact by increasing your income, dramatically reducing other expenses, or shortening your ownership period to minimize depreciation losses. ` +
         `The goal is not to abandon your passion for performance vehicles, but to ensure that your pursuit of that passion does not come at the expense of your financial freedom and long-term security.`;
     }
 
