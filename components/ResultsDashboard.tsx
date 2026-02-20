@@ -768,8 +768,8 @@ export default function ResultsDashboard({
       </div>
 
       {/* Score + Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-        <div className="glass-panel card-hover p-6 flex flex-col items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="glass-panel card-hover p-6 flex flex-col items-center justify-center h-80">
           <h3 className="text-lg font-semibold mb-3 text-gray-600">
             Discipline Score
           </h3>
@@ -779,14 +779,16 @@ export default function ResultsDashboard({
           />
         </div>
 
-        <div className="glass-panel card-hover p-6">
+        <div className="glass-panel card-hover p-6 flex flex-col h-80">
           <h3 className="text-lg font-semibold mb-3 text-gray-600">
             Portfolio at Retirement
           </h3>
-          <ComparisonChart
-            fvNoCar={results.fvNoCar}
-            fvWithCar={results.fvWithCar}
-          />
+          <div className="flex-1">
+            <ComparisonChart
+              fvNoCar={results.fvNoCar}
+              fvWithCar={results.fvWithCar}
+            />
+          </div>
         </div>
       </div>
 
