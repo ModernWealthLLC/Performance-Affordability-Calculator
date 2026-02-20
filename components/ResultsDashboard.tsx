@@ -103,58 +103,54 @@ export default function ResultsDashboard({
   const handleDownloadPDF = useCallback(async () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    let y = 15;
+    let y = 12;
 
     // --- Logo ---
     const logoData = await loadLogoAsBase64();
     if (logoData) {
-      const logoWidth = 60;
-      const logoHeight = 19;
+      const logoWidth = 55;
+      const logoHeight = 17;
       const logoX = (pageWidth - logoWidth) / 2;
       doc.addImage(logoData, "PNG", logoX, y, logoWidth, logoHeight);
-      y += logoHeight + 6;
+      y += logoHeight + 4;
     }
 
     // --- Title ---
-    doc.setFontSize(20);
+    doc.setFontSize(18);
     doc.setTextColor(15, 72, 127);
     doc.text("Performance Affordability Report", pageWidth / 2, y, {
       align: "center",
     });
-    y += 9;
+    y += 7;
 
-    // --- User Info ---
-    doc.setFontSize(11);
-    doc.setTextColor(80, 80, 80);
-    doc.setFont("helvetica", "normal");
+    // --- User Info (single line: name + email) ---
     const fullName = `${firstName} ${lastName}`.trim();
-    if (fullName) {
-      doc.text(`Prepared for: ${fullName}`, pageWidth / 2, y, {
-        align: "center",
-      });
-      y += 5.5;
-    }
-    if (email) {
-      doc.setFontSize(9);
-      doc.setTextColor(130, 130, 130);
-      doc.text(email, pageWidth / 2, y, { align: "center" });
-      y += 5.5;
+    if (fullName || email) {
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      const userLine = fullName && email
+        ? `Prepared for: ${fullName}  |  ${email}`
+        : fullName
+          ? `Prepared for: ${fullName}`
+          : email;
+      doc.text(userLine, pageWidth / 2, y, { align: "center" });
+      y += 5;
     }
 
     // --- Divider ---
-    y += 2;
+    y += 1;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // === KEY METRICS ===
-    doc.setFontSize(13);
+    doc.setFontSize(12);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Key Metrics", 20, y);
-    y += 7;
+    y += 6;
 
     const metrics = [
       ["Car-to-Net-Worth", `${results.carToNetWorthPercent.toFixed(1)}%`],
@@ -169,20 +165,20 @@ export default function ResultsDashboard({
 
     for (const [label, value] of metrics) {
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setTextColor(120, 120, 120);
       doc.text(label, 25, y);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(30, 30, 30);
       doc.text(value, pageWidth - 25, y, { align: "right" });
-      y += 6.5;
+      y += 5.5;
     }
 
-    y += 4;
+    y += 2;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.3);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // === TWO-COLUMN: Discipline Score Gauge (left) + Portfolio Chart (right) ===
     const colStartY = y;
@@ -190,17 +186,16 @@ export default function ResultsDashboard({
     const rightColX = pageWidth / 2 + 5;
 
     // --- LEFT: Discipline Score Gauge ---
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Discipline Score", leftColX, y);
 
     const gaugeCx = leftColX + 38;
-    const gaugeCy = y + 24;
-    const gaugeRadius = 18;
-    // Arc from bottom-left to bottom-right (270° sweep), gap at bottom
-    const gaugeStartAngle = (3 * Math.PI) / 4; // 135° (lower-left)
-    const gaugeTotalAngle = (3 * Math.PI) / 2; // 270° sweep
+    const gaugeCy = y + 20;
+    const gaugeRadius = 15;
+    const gaugeStartAngle = (3 * Math.PI) / 4;
+    const gaugeTotalAngle = (3 * Math.PI) / 2;
 
     // Background arc (light gray)
     drawGaugeArc(
@@ -211,7 +206,7 @@ export default function ResultsDashboard({
       gaugeStartAngle,
       gaugeStartAngle + gaugeTotalAngle,
       [220, 220, 220],
-      3.5
+      3
     );
 
     // Score arc (colored)
@@ -226,12 +221,12 @@ export default function ResultsDashboard({
         gaugeStartAngle,
         gaugeStartAngle + scoreRatio * gaugeTotalAngle,
         scoreColor,
-        3.5
+        3
       );
     }
 
     // Score number in center
-    doc.setFontSize(20);
+    doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
     doc.text(String(results.disciplineScore), gaugeCx, gaugeCy + 2, {
@@ -239,28 +234,28 @@ export default function ResultsDashboard({
     });
 
     // "/ 100" below score
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(160, 160, 160);
-    doc.text("/ 100", gaugeCx, gaugeCy + 8, { align: "center" });
+    doc.text("/ 100", gaugeCx, gaugeCy + 7, { align: "center" });
 
     // Category label below gauge
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.text(results.disciplineCategory, gaugeCx, gaugeCy + gaugeRadius + 10, {
+    doc.text(results.disciplineCategory, gaugeCx, gaugeCy + gaugeRadius + 8, {
       align: "center",
     });
 
     // --- RIGHT: Portfolio at Retirement Bar Chart ---
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Portfolio at Retirement", rightColX, colStartY);
 
-    const chartY = colStartY + 10;
+    const chartY = colStartY + 8;
     const barMaxWidth = 55;
-    const barHeight = 10;
+    const barHeight = 9;
     const maxPortfolio = Math.max(results.fvNoCar, results.fvWithCar);
 
     // "Without Car" bar
@@ -274,17 +269,17 @@ export default function ResultsDashboard({
     );
     doc.setFillColor(34, 197, 94);
     doc.roundedRect(rightColX, chartY + 2, noCarWidth, barHeight, 1, 1, "F");
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(34, 197, 94);
     doc.text(
       formatCurrency(results.fvNoCar),
       rightColX + noCarWidth + 3,
-      chartY + 9
+      chartY + 8
     );
 
     // "With Car" bar
-    const bar2Y = chartY + barHeight + 10;
+    const bar2Y = chartY + barHeight + 7;
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
@@ -295,37 +290,37 @@ export default function ResultsDashboard({
     );
     doc.setFillColor(239, 68, 68);
     doc.roundedRect(rightColX, bar2Y + 2, withCarWidth, barHeight, 1, 1, "F");
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(239, 68, 68);
     doc.text(
       formatCurrency(results.fvWithCar),
       rightColX + withCarWidth + 3,
-      bar2Y + 9
+      bar2Y + 8
     );
 
     // Difference label
-    const diffY = bar2Y + barHeight + 8;
+    const diffY = bar2Y + barHeight + 6;
     const diff = results.fvNoCar - results.fvWithCar;
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 72, 127);
     doc.text(`Difference: ${formatCurrency(diff)}`, rightColX, diffY);
 
     // Move y past the two-column section
-    y = Math.max(gaugeCy + gaugeRadius + 16, diffY + 6);
-    y += 4;
+    y = Math.max(gaugeCy + gaugeRadius + 12, diffY + 4);
+    y += 2;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.3);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // === DETAILED BREAKDOWN ===
-    doc.setFontSize(13);
+    doc.setFontSize(12);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Detailed Breakdown", 20, y);
-    y += 7;
+    y += 6;
 
     const details = [
       ["FI Number (4% Rule)", formatCurrency(results.fiNumber)],
@@ -352,14 +347,9 @@ export default function ResultsDashboard({
     ];
 
     for (const [label, value] of details) {
-      // Check if we need a new page
-      if (y > pageHeight - 20) {
-        doc.addPage();
-        y = 20;
-      }
       const isHighlight = label === "Total Opportunity Cost";
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setTextColor(120, 120, 120);
       doc.text(label, 25, y);
       doc.setFont("helvetica", "bold");
@@ -369,19 +359,15 @@ export default function ResultsDashboard({
         doc.setTextColor(30, 30, 30);
       }
       doc.text(value, pageWidth - 25, y, { align: "right" });
-      y += 6.5;
+      y += 5.5;
     }
 
     // --- Footer ---
-    y += 6;
-    if (y > pageHeight - 15) {
-      doc.addPage();
-      y = 20;
-    }
+    y += 4;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
-    y += 6;
+    y += 5;
 
     doc.setFontSize(8);
     doc.setTextColor(160, 160, 160);
