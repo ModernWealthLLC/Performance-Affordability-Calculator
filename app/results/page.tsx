@@ -40,6 +40,10 @@ function ResultsContent() {
     expectedResalePercent: num("expectedResalePercent", 55),
   };
 
+  const firstName = searchParams.get("firstName") || "";
+  const lastName = searchParams.get("lastName") || "";
+  const email = searchParams.get("email") || "";
+
   const results = calculate(personal, vehicle);
 
   return (
@@ -60,7 +64,12 @@ function ResultsContent() {
           Edit Inputs
         </button>
       </div>
-      <ResultsDashboard results={results} />
+      <ResultsDashboard
+        results={results}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+      />
     </div>
   );
 }
