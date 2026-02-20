@@ -29,13 +29,13 @@ body {
 
 @layer components {
   .glass-panel {
-    @apply bg-white border border-gray-200 rounded-xl shadow-sm;
+    @apply bg-white border border-[#cfcfcf] rounded-xl shadow-sm;
   }
   .card-hover {
     @apply transition-all duration-300 hover:border-[#0f487f]/30 hover:shadow-lg hover:shadow-[#0f487f]/5;
   }
   .input-field {
-    @apply w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-900
+    @apply w-full bg-white border border-[#cfcfcf] rounded-lg px-4 py-3 text-gray-900
            placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1
            focus:ring-[#0f487f] transition-colors;
   }

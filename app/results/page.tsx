@@ -55,7 +55,7 @@ function ResultsContent() {
         </div>
         <button
           onClick={() => router.back()}
-          className="text-sm text-gray-500 hover:text-[#0f487f] border border-gray-300 hover:border-[#0f487f] px-4 py-2 rounded-lg transition-colors"
+          className="text-sm text-gray-500 hover:text-[#0f487f] border border-[#cfcfcf] hover:border-[#0f487f] px-4 py-2 rounded-lg transition-colors"
         >
           Edit Inputs
         </button>

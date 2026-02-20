@@ -42,7 +42,7 @@ export default function ContactModal({ onSubmit, onClose }: ContactModalProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 border border-gray-200">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 border border-[#cfcfcf]">
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
           Almost There!
         </h3>
@@ -69,7 +69,7 @@ export default function ContactModal({ onSubmit, onClose }: ContactModalProps) {
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
+              className="w-full bg-white border border-[#cfcfcf] rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
               placeholder="John"
             />
           </div>
@@ -82,7 +82,7 @@ export default function ContactModal({ onSubmit, onClose }: ContactModalProps) {
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
+              className="w-full bg-white border border-[#cfcfcf] rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
               placeholder="Doe"
             />
           </div>
@@ -95,7 +95,7 @@ export default function ContactModal({ onSubmit, onClose }: ContactModalProps) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
+              className="w-full bg-white border border-[#cfcfcf] rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1 focus:ring-[#0f487f] transition-colors"
               placeholder="john@example.com"
             />
           </div>
@@ -104,7 +104,7 @@ export default function ContactModal({ onSubmit, onClose }: ContactModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              className="flex-1 py-3 px-4 rounded-lg border border-[#cfcfcf] text-gray-700 font-medium hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>
