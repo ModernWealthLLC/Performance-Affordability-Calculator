@@ -46,7 +46,7 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <svg viewBox="0 0 200 170" className="w-44 h-auto">
+      <svg viewBox="0 0 200 170" className="w-36 max-w-[9rem] h-auto">
         <path
           d={bgPath}
           fill="none"

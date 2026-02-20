@@ -769,8 +769,8 @@ export default function ResultsDashboard({
 
       {/* Score + Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-panel card-hover p-6 flex flex-col items-center justify-center h-80">
-          <h3 className="text-lg font-semibold mb-3 text-gray-600">
+        <div className="glass-panel card-hover p-6 flex flex-col items-center justify-center">
+          <h3 className="text-lg font-semibold mb-2 text-gray-600">
             Discipline Score
           </h3>
           <ScoreGauge
@@ -779,16 +779,14 @@ export default function ResultsDashboard({
           />
         </div>
 
-        <div className="glass-panel card-hover p-6 flex flex-col h-80">
-          <h3 className="text-lg font-semibold mb-3 text-gray-600">
+        <div className="glass-panel card-hover p-6">
+          <h3 className="text-lg font-semibold mb-2 text-gray-600">
             Portfolio at Retirement
           </h3>
-          <div className="flex-1">
-            <ComparisonChart
-              fvNoCar={results.fvNoCar}
-              fvWithCar={results.fvWithCar}
-            />
-          </div>
+          <ComparisonChart
+            fvNoCar={results.fvNoCar}
+            fvWithCar={results.fvWithCar}
+          />
         </div>
       </div>
 
