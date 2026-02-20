@@ -383,6 +383,176 @@ export default function ResultsDashboard({
       { align: "center" }
     );
 
+    // =============================================
+    // PAGE 2: Explanation & Glossary
+    // =============================================
+    doc.addPage();
+    y = 20;
+    const textWidth = pageWidth - 40;
+
+    // --- Page 2 Title ---
+    doc.setFontSize(16);
+    doc.setTextColor(15, 72, 127);
+    doc.setFont("helvetica", "bold");
+    doc.text("Understanding Your Results", pageWidth / 2, y, {
+      align: "center",
+    });
+    y += 10;
+
+    // --- Score-based explanation paragraph ---
+    let explanation: string;
+    if (results.disciplineScore >= 85) {
+      explanation =
+        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Elite Discipline category. ` +
+        `This is an outstanding result, indicating that your performance vehicle purchase is well within your financial means. ` +
+        `Your car-to-net-worth ratio, savings rate, and projected financial independence timeline all suggest that you can ` +
+        `comfortably enjoy this vehicle without materially impacting your long-term wealth goals. Continue maintaining this ` +
+        `level of financial discipline as you pursue your automotive passion.`;
+    } else if (results.disciplineScore >= 70) {
+      explanation =
+        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Controlled Enthusiast category. ` +
+        `This is a solid result, indicating that your performance vehicle purchase is generally reasonable relative to your ` +
+        `financial profile. While the car does have a measurable impact on your path to financial independence, your overall ` +
+        `savings habits and net worth provide a healthy buffer. Consider monitoring your total vehicle costs annually to ` +
+        `ensure they remain in line with your wealth-building objectives.`;
+    } else if (results.disciplineScore >= 50) {
+      explanation =
+        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Aggressive category. ` +
+        `This result indicates that your performance vehicle purchase represents a significant allocation of your financial ` +
+        `resources. The opportunity cost of ownership is meaningfully impacting your projected retirement portfolio and ` +
+        `delaying your financial independence timeline. You may want to evaluate whether a less expensive vehicle, shorter ` +
+        `hold period, or increased savings rate could help bring your financial plan back into better balance.`;
+    } else {
+      explanation =
+        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Lifestyle Risk category. ` +
+        `This is a warning signal that your performance vehicle purchase may be stretching your finances beyond a ` +
+        `sustainable level. The car represents a large percentage of your net worth and investable assets, and the true ` +
+        `annual cost is significantly eroding your ability to build long-term wealth. We strongly recommend revisiting your ` +
+        `vehicle budget, exploring more affordable alternatives, or substantially increasing your income and savings before ` +
+        `committing to this purchase.`;
+    }
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(60, 60, 60);
+    const explanationLines = doc.splitTextToSize(explanation, textWidth);
+    doc.text(explanationLines, 20, y);
+    y += explanationLines.length * 4.5 + 6;
+
+    // --- Divider ---
+    doc.setDrawColor(207, 207, 207);
+    doc.setLineWidth(0.5);
+    doc.line(20, y, pageWidth - 20, y);
+    y += 8;
+
+    // --- Glossary Header ---
+    doc.setFontSize(14);
+    doc.setTextColor(15, 72, 127);
+    doc.setFont("helvetica", "bold");
+    doc.text("Glossary of Terms", 20, y);
+    y += 8;
+
+    const glossary: [string, string][] = [
+      [
+        "Discipline Score",
+        "A composite rating from 0 to 100 that evaluates how well a vehicle purchase aligns with your overall financial health, based on net worth ratios, savings rate, FI delay, and investable asset ratios.",
+      ],
+      [
+        "FI Number (4% Rule)",
+        "The total investment portfolio needed to fund your retirement spending indefinitely, calculated as your target annual retirement spending divided by 4%.",
+      ],
+      [
+        "Loan Amount",
+        "The total amount financed for the vehicle purchase, equal to the purchase price minus your down payment.",
+      ],
+      [
+        "Monthly Payment",
+        "The estimated monthly loan payment based on the loan amount, interest rate, and loan term.",
+      ],
+      [
+        "Annual Loan Payments",
+        "The total yearly cost of your vehicle loan payments, equal to your monthly payment multiplied by 12.",
+      ],
+      [
+        "Annual Depreciation",
+        "The estimated yearly loss in vehicle value, calculated as the difference between the purchase price and projected resale value, divided by the hold period.",
+      ],
+      [
+        "Resale Value",
+        "The projected value of the vehicle at the end of your planned hold period, based on the expected resale percentage you provided.",
+      ],
+      [
+        "True Annual Cost",
+        "The comprehensive yearly cost of vehicle ownership, including loan payments, maintenance, insurance, track budget, and depreciation.",
+      ],
+      [
+        "Opportunity Cost of Purchase",
+        "The future value of the purchase price if it had been invested instead, grown at your expected rate of return until retirement.",
+      ],
+      [
+        "Opportunity Cost of Annual Expenses",
+        "The future value of all annual vehicle costs if those funds had been invested each year until retirement.",
+      ],
+      [
+        "Total Opportunity Cost",
+        "The combined opportunity cost of both the initial purchase and ongoing annual expenses, representing the total wealth you forgo by owning this vehicle.",
+      ],
+      [
+        "Portfolio Without Car",
+        "Your projected investment portfolio at retirement if you did not purchase this vehicle and invested all savings at your expected return.",
+      ],
+      [
+        "Portfolio With Car",
+        "Your projected investment portfolio at retirement after accounting for all vehicle-related costs reducing your annual savings.",
+      ],
+      [
+        "Car-to-Net-Worth",
+        "The vehicle purchase price expressed as a percentage of your total net worth. Financial advisors generally recommend keeping this below 10%.",
+      ],
+      [
+        "Car-to-Investable Assets",
+        "The vehicle purchase price as a percentage of your liquid investable assets, showing how much of your investment capital the car represents.",
+      ],
+      [
+        "Savings Rate",
+        "Your annual savings as a percentage of your gross annual income. A rate of 25% or higher is generally considered excellent for long-term wealth building.",
+      ],
+      [
+        "FI Delay",
+        "The additional number of years it will take to reach financial independence as a result of owning this vehicle, compared to not owning it.",
+      ],
+    ];
+
+    for (const [term, definition] of glossary) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(30, 30, 30);
+      doc.text(term, 20, y);
+      y += 4;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(90, 90, 90);
+      const defLines = doc.splitTextToSize(definition, textWidth - 5);
+      doc.text(defLines, 22, y);
+      y += defLines.length * 3.5 + 3.5;
+    }
+
+    // --- Page 2 Footer ---
+    const footerY = 287;
+    doc.setDrawColor(207, 207, 207);
+    doc.setLineWidth(0.5);
+    doc.line(20, footerY - 5, pageWidth - 20, footerY - 5);
+    doc.setFontSize(8);
+    doc.setTextColor(160, 160, 160);
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      "Generated by Performance Affordability Calculator",
+      pageWidth / 2,
+      footerY,
+      { align: "center" }
+    );
+
     doc.save("performance-affordability-report.pdf");
   }, [results, firstName, lastName, email]);
 
