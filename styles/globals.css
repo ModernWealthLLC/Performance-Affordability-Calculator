@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --foreground: #ffffff;
-  --background: #0a0a0a;
+  --foreground: #1a1a1a;
+  --background: #ffffff;
+  --brand-primary: #0f487f;
+  --brand-secondary: #cfcfcf;
 }
 
 body {
@@ -27,18 +29,18 @@ body {
 
 @layer components {
   .glass-panel {
-    @apply bg-neutral-900/80 backdrop-blur-md border border-neutral-800 rounded-xl;
+    @apply bg-white border border-gray-200 rounded-xl shadow-sm;
   }
   .card-hover {
-    @apply transition-all duration-300 hover:border-red-500/30 hover:shadow-lg hover:shadow-red-500/5;
+    @apply transition-all duration-300 hover:border-[#0f487f]/30 hover:shadow-lg hover:shadow-[#0f487f]/5;
   }
   .input-field {
-    @apply w-full bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-3 text-white
-           placeholder-neutral-500 focus:outline-none focus:border-red-500 focus:ring-1
-           focus:ring-red-500 transition-colors;
+    @apply w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-900
+           placeholder-gray-400 focus:outline-none focus:border-[#0f487f] focus:ring-1
+           focus:ring-[#0f487f] transition-colors;
   }
   .btn-primary {
-    @apply bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-8 rounded-lg
-           transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25 active:scale-[0.98];
+    @apply bg-[#0f487f] hover:bg-[#0d3d6b] text-white font-semibold py-3 px-8 rounded-lg
+           transition-all duration-300 hover:shadow-lg hover:shadow-[#0f487f]/25 active:scale-[0.98];
   }
 }

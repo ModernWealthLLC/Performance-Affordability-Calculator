@@ -46,16 +46,16 @@ function ResultsContent() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight mb-1">
-            Your <span className="text-red-500">Results</span>
+          <h2 className="text-3xl font-bold tracking-tight mb-1 text-gray-900">
+            Your <span className="text-[#0f487f]">Results</span>
           </h2>
-          <p className="text-neutral-400">
+          <p className="text-gray-500">
             Here&apos;s the true cost of your performance vehicle.
           </p>
         </div>
         <button
           onClick={() => router.back()}
-          className="text-sm text-neutral-400 hover:text-white border border-neutral-700 hover:border-neutral-500 px-4 py-2 rounded-lg transition-colors"
+          className="text-sm text-gray-500 hover:text-[#0f487f] border border-gray-300 hover:border-[#0f487f] px-4 py-2 rounded-lg transition-colors"
         >
           Edit Inputs
         </button>
@@ -70,7 +70,7 @@ export default function ResultsPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#0f487f] border-t-transparent rounded-full animate-spin" />
         </div>
       }
     >

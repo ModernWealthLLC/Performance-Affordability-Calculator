@@ -6,10 +6,10 @@ export default function Home() {
   return (
     <div>
       <div className="mb-10">
-        <h2 className="text-3xl font-bold tracking-tight mb-2">
-          Can You <span className="text-red-500">Really</span> Afford That Car?
+        <h2 className="text-3xl font-bold tracking-tight mb-2 text-gray-900">
+          Can You <span className="text-[#0f487f]">Really</span> Afford That Car?
         </h2>
-        <p className="text-neutral-400 text-lg">
+        <p className="text-gray-500 text-lg">
           Enter your financial details and vehicle costs to see the true impact
           on your path to financial independence.
         </p>

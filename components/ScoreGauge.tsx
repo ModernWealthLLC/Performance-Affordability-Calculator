@@ -50,7 +50,7 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
         <path
           d={bgPath}
           fill="none"
-          stroke="#262626"
+          stroke="#e5e5e5"
           strokeWidth="14"
           strokeLinecap="round"
         />
@@ -70,7 +70,7 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
           x={cx}
           y={cy - 5}
           textAnchor="middle"
-          className="fill-white text-4xl font-bold"
+          className="fill-gray-900 text-4xl font-bold"
           style={{ fontSize: "36px" }}
         >
           {clampedScore}
@@ -79,7 +79,7 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
           x={cx}
           y={cy + 18}
           textAnchor="middle"
-          className="fill-neutral-400"
+          className="fill-gray-400"
           style={{ fontSize: "11px" }}
         >
           / {maxScore}
