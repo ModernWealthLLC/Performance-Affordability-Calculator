@@ -384,73 +384,203 @@ export default function ResultsDashboard({
     );
 
     // =============================================
-    // PAGE 2: Explanation & Glossary
+    // PAGE 2: Understanding Your Results
     // =============================================
     doc.addPage();
     y = 20;
     const textWidth = pageWidth - 40;
 
     // --- Page 2 Title ---
-    doc.setFontSize(16);
+    doc.setFontSize(18);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Understanding Your Results", pageWidth / 2, y, {
       align: "center",
     });
-    y += 10;
+    y += 6;
 
-    // --- Score-based explanation paragraph ---
-    let explanation: string;
-    if (results.disciplineScore >= 85) {
-      explanation =
-        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Elite Discipline category. ` +
-        `This is an outstanding result, indicating that your performance vehicle purchase is well within your financial means. ` +
-        `Your car-to-net-worth ratio, savings rate, and projected financial independence timeline all suggest that you can ` +
-        `comfortably enjoy this vehicle without materially impacting your long-term wealth goals. Continue maintaining this ` +
-        `level of financial discipline as you pursue your automotive passion.`;
-    } else if (results.disciplineScore >= 70) {
-      explanation =
-        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Controlled Enthusiast category. ` +
-        `This is a solid result, indicating that your performance vehicle purchase is generally reasonable relative to your ` +
-        `financial profile. While the car does have a measurable impact on your path to financial independence, your overall ` +
-        `savings habits and net worth provide a healthy buffer. Consider monitoring your total vehicle costs annually to ` +
-        `ensure they remain in line with your wealth-building objectives.`;
-    } else if (results.disciplineScore >= 50) {
-      explanation =
-        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Aggressive category. ` +
-        `This result indicates that your performance vehicle purchase represents a significant allocation of your financial ` +
-        `resources. The opportunity cost of ownership is meaningfully impacting your projected retirement portfolio and ` +
-        `delaying your financial independence timeline. You may want to evaluate whether a less expensive vehicle, shorter ` +
-        `hold period, or increased savings rate could help bring your financial plan back into better balance.`;
+    // Accent line under title
+    doc.setDrawColor(15, 72, 127);
+    doc.setLineWidth(0.6);
+    const accentW = 50;
+    doc.line(
+      pageWidth / 2 - accentW / 2,
+      y,
+      pageWidth / 2 + accentW / 2,
+      y
+    );
+    y += 12;
+
+    // --- Personalized score-based paragraphs ---
+    const displayName = firstName || "there";
+    const scorePct = results.disciplineScore;
+    const category = results.disciplineCategory;
+    const carNW = results.carToNetWorthPercent.toFixed(1);
+    const savRate = results.savingsRate.toFixed(1);
+    const tac = formatCurrency(results.trueAnnualCost);
+    const fvNo = formatCurrency(results.fvNoCar);
+    const fvWith = formatCurrency(results.fvWithCar);
+    const fvDiff = formatCurrency(results.fvNoCar - results.fvWithCar);
+    const fiDelay = results.fiDelayYears.toFixed(1);
+
+    const renderSection = (title: string, body: string) => {
+      doc.setFontSize(12);
+      doc.setTextColor(15, 72, 127);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, 20, y);
+      y += 7;
+
+      doc.setFontSize(10.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(55, 55, 55);
+      const lines = doc.splitTextToSize(body, textWidth);
+      doc.text(lines, 20, y);
+      y += lines.length * 5 + 8;
+    };
+
+    let p1: string, p2: string, p3: string, p4: string;
+
+    if (scorePct >= 85) {
+      p1 =
+        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category — the highest tier in our framework. ` +
+        `This exceptional result indicates that your performance vehicle purchase is very well aligned with your overall financial position. ` +
+        `You have demonstrated a rare balance between pursuing your automotive passion and maintaining strong financial discipline. ` +
+        `Very few enthusiasts achieve a score at this level, and it reflects both thoughtful planning and a solid foundation of wealth-building habits.`;
+
+      p2 =
+        `Your car-to-net-worth ratio of ${carNW}% is well within the recommended threshold of 10%, meaning this vehicle represents a modest fraction of your total wealth. ` +
+        `Your current savings rate of ${savRate}% demonstrates that you are consistently setting aside a meaningful portion of your income for long-term growth. ` +
+        `The true annual cost of ownership — ${tac} when including depreciation, insurance, maintenance, and loan payments — is comfortably absorbed by your financial profile without compromising your ability to invest and build wealth over time.`;
+
+      p3 =
+        `Every major purchase carries an opportunity cost, and your vehicle is no exception. If the total cost of this car were invested instead, your portfolio at retirement could be ${fvNo} rather than ${fvWith} — a difference of ${fvDiff}. ` +
+        `However, your financial independence timeline is only delayed by approximately ${fiDelay} years, which is a modest trade-off for the enjoyment and utility this vehicle provides. ` +
+        `This minimal delay confirms that the purchase fits comfortably within your broader wealth-building plan.`;
+
+      p4 =
+        `Continue doing exactly what you are doing, ${displayName}. Your financial habits are strong, and this purchase does not materially threaten your path to financial independence. ` +
+        `Focus on maintaining your savings rate, staying disciplined with ongoing vehicle costs such as maintenance and insurance, and reviewing your overall financial plan annually. ` +
+        `You have earned the right to enjoy this vehicle with confidence, knowing that your long-term financial future remains on a solid trajectory.`;
+    } else if (scorePct >= 70) {
+      p1 =
+        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
+        `This is a solid result that indicates your performance vehicle purchase is generally well-proportioned relative to your financial profile. ` +
+        `While the vehicle does represent a meaningful financial commitment, your overall savings habits and net worth provide a reasonable buffer. ` +
+        `You are balancing your enthusiasm for performance vehicles with responsible financial planning, though there is room to strengthen that balance further.`;
+
+      p2 =
+        `Your car-to-net-worth ratio sits at ${carNW}%, which means the vehicle represents a noticeable but not outsized portion of your overall wealth. ` +
+        `Your savings rate of ${savRate}% shows that you are directing income toward long-term growth, though increasing this figure would further strengthen your financial position. ` +
+        `The true annual cost of ownership comes to ${tac} when you factor in depreciation, insurance, maintenance, and financing costs. ` +
+        `This is a real expense that deserves ongoing attention in your annual budget to make sure it does not creep higher over time.`;
+
+      p3 =
+        `The opportunity cost of this vehicle is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your retirement portfolio could reach ${fvNo} compared to the projected ${fvWith} with the vehicle — a gap of ${fvDiff}. ` +
+        `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable trade-off, it is significant enough to warrant monitoring your total vehicle costs each year and ensuring they remain within comfortable bounds as your financial situation evolves.`;
+
+      p4 =
+        `Our recommendation is to maintain your current trajectory while looking for opportunities to optimize, ${displayName}. ` +
+        `Consider setting a strict annual vehicle cost budget that includes maintenance, insurance, and any track or modification expenses. ` +
+        `If possible, look for ways to increase your savings rate by even a few percentage points — small improvements compound significantly over time. ` +
+        `You are in a good position overall, and a bit of extra financial discipline will help ensure this vehicle remains a source of enjoyment rather than financial stress.`;
+    } else if (scorePct >= 50) {
+      p1 =
+        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
+        `This result signals that your performance vehicle purchase represents a significant financial commitment relative to your current means. ` +
+        `While your enthusiasm for this vehicle is understandable, the numbers indicate that the purchase is stretching your financial resources in ways that could meaningfully impact your long-term wealth-building goals. ` +
+        `This is not an uncommon situation among car enthusiasts, but it does require careful attention and potentially some adjustments to your plan.`;
+
+      p2 =
+        `Your car-to-net-worth ratio of ${carNW}% indicates that a substantial share of your wealth is concentrated in this single depreciating asset. ` +
+        `Your savings rate of ${savRate}% is being compressed by the costs of ownership, and the true annual cost of ${tac} — which accounts for depreciation, insurance, maintenance, and loan payments — is consuming a meaningful portion of your annual income. ` +
+        `These metrics suggest that the vehicle is competing directly with your ability to build long-term financial security through consistent investment contributions.`;
+
+      p3 =
+        `The opportunity cost paints a clear picture of the long-term trade-off. Without this vehicle, your projected retirement portfolio would be ${fvNo}, compared to ${fvWith} with it — a difference of ${fvDiff} in future wealth. ` +
+        `Your financial independence is delayed by approximately ${fiDelay} years as a direct result. This is a significant gap that grows larger with time due to the compounding nature of investment returns. ` +
+        `Every year of delay represents both lost portfolio growth and additional years of mandatory work before you can retire on your own terms.`;
+
+      p4 =
+        `We recommend taking a hard look at the total cost picture, ${displayName}. Consider whether a less expensive vehicle, a shorter hold period, or a larger down payment could bring your Discipline Score into a healthier range. ` +
+        `If this specific vehicle is important to you, focus on aggressively increasing your income or cutting other discretionary expenses to boost your savings rate. ` +
+        `Even modest improvements — saving an extra few hundred dollars per month — can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to your original goal.`;
     } else {
-      explanation =
-        `Your Discipline Score of ${results.disciplineScore}/100 places you in the Lifestyle Risk category. ` +
-        `This is a warning signal that your performance vehicle purchase may be stretching your finances beyond a ` +
-        `sustainable level. The car represents a large percentage of your net worth and investable assets, and the true ` +
-        `annual cost is significantly eroding your ability to build long-term wealth. We strongly recommend revisiting your ` +
-        `vehicle budget, exploring more affordable alternatives, or substantially increasing your income and savings before ` +
-        `committing to this purchase.`;
+      p1 =
+        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
+        `This is the most cautionary tier in our scoring framework, and it indicates that your performance vehicle purchase may be significantly overextending your current financial position. ` +
+        `We understand the emotional pull of a dream car, but the numbers suggest that this purchase, at this time, poses a real risk to your long-term financial health. ` +
+        `It is important to review these findings carefully and consider whether adjustments are needed before committing to this vehicle.`;
+
+      p2 =
+        `The financial metrics raise several concerns. Your car-to-net-worth ratio of ${carNW}% is well above the recommended 10% threshold, meaning a disproportionate share of your wealth is tied up in a rapidly depreciating asset. ` +
+        `Your savings rate has been reduced to ${savRate}%, which limits your ability to build the investment portfolio needed for financial independence. ` +
+        `The true annual cost of ${tac} — including depreciation, insurance, maintenance, and loan payments — is consuming a large portion of your annual income and crowding out funds that could be directed toward savings and investments.`;
+
+      p3 =
+        `The long-term financial impact is substantial. Without this vehicle, your projected retirement portfolio would be ${fvNo}, but with the vehicle it drops to ${fvWith} — a reduction of ${fvDiff} in lifetime wealth. ` +
+        `Your path to financial independence is delayed by approximately ${fiDelay} years. This means additional years of mandatory work, reduced financial flexibility, and a significantly smaller safety net for unexpected life events. ` +
+        `The compounding effect of these lost investment years cannot easily be recovered once the time has passed.`;
+
+      p4 =
+        `Our strong recommendation is to reassess this purchase, ${displayName}. Consider more affordable alternatives that still deliver an engaging driving experience but at a fraction of the total cost. ` +
+        `If you are already committed to this vehicle, explore ways to offset the financial impact — such as increasing your income, dramatically reducing other expenses, or shortening your ownership period to minimize depreciation losses. ` +
+        `The goal is not to abandon your passion for performance vehicles, but to ensure that your pursuit of that passion does not come at the expense of your financial freedom and long-term security.`;
     }
 
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(60, 60, 60);
-    const explanationLines = doc.splitTextToSize(explanation, textWidth);
-    doc.text(explanationLines, 20, y);
-    y += explanationLines.length * 4.5 + 6;
+    renderSection("Your Discipline Score", p1);
+    renderSection("Your Financial Snapshot", p2);
+    renderSection("The Long-Term Impact", p3);
+    renderSection("Our Recommendation", p4);
 
-    // --- Divider ---
+    // --- Page 2 Footer ---
+    const footer2Y = 287;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
-    doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    doc.line(20, footer2Y - 5, pageWidth - 20, footer2Y - 5);
+    doc.setFontSize(8);
+    doc.setTextColor(160, 160, 160);
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      "Generated by Performance Affordability Calculator",
+      pageWidth / 2,
+      footer2Y,
+      { align: "center" }
+    );
 
-    // --- Glossary Header ---
-    doc.setFontSize(14);
+    // =============================================
+    // PAGE 3: Glossary of Terms
+    // =============================================
+    doc.addPage();
+    y = 20;
+
+    // --- Page 3 Title ---
+    doc.setFontSize(16);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
-    doc.text("Glossary of Terms", 20, y);
-    y += 8;
+    doc.text("Glossary of Terms", pageWidth / 2, y, { align: "center" });
+    y += 6;
+
+    // Accent line under title
+    doc.setDrawColor(15, 72, 127);
+    doc.setLineWidth(0.6);
+    doc.line(
+      pageWidth / 2 - accentW / 2,
+      y,
+      pageWidth / 2 + accentW / 2,
+      y
+    );
+    y += 4;
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(120, 120, 120);
+    doc.text(
+      "Key terms and definitions used throughout this report.",
+      pageWidth / 2,
+      y,
+      { align: "center" }
+    );
+    y += 10;
 
     const glossary: [string, string][] = [
       [
@@ -525,31 +655,31 @@ export default function ResultsDashboard({
 
     for (const [term, definition] of glossary) {
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(8.5);
+      doc.setFontSize(9);
       doc.setTextColor(30, 30, 30);
       doc.text(term, 20, y);
-      y += 3.5;
+      y += 4;
 
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
+      doc.setFontSize(8.5);
       doc.setTextColor(90, 90, 90);
       const defLines = doc.splitTextToSize(definition, textWidth - 5);
       doc.text(defLines, 22, y);
-      y += defLines.length * 3 + 2.5;
+      y += defLines.length * 3.5 + 3;
     }
 
-    // --- Page 2 Footer ---
-    const footerY = 287;
+    // --- Page 3 Footer ---
+    const footer3Y = 287;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
-    doc.line(20, footerY - 5, pageWidth - 20, footerY - 5);
+    doc.line(20, footer3Y - 5, pageWidth - 20, footer3Y - 5);
     doc.setFontSize(8);
     doc.setTextColor(160, 160, 160);
     doc.setFont("helvetica", "normal");
     doc.text(
       "Generated by Performance Affordability Calculator",
       pageWidth / 2,
-      footerY,
+      footer3Y,
       { align: "center" }
     );
 
