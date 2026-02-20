@@ -50,6 +50,7 @@ function InputField({
   onChange,
   prefix,
   suffix,
+  step,
 }: {
   label: string;
   name: string;
@@ -57,6 +58,7 @@ function InputField({
   onChange: (name: string, value: string) => void;
   prefix?: string;
   suffix?: string;
+  step?: string;
 }) {
   return (
     <div>
@@ -72,6 +74,7 @@ function InputField({
           name={name}
           value={value}
           min="0"
+          step={step || "1"}
           onChange={(e) => onChange(name, e.target.value)}
           className={`input-field ${prefix ? "pl-8" : ""} ${suffix ? "pr-10" : ""}`}
         />
@@ -200,6 +203,7 @@ export default function FinancialForm() {
               value={form.expectedReturn}
               onChange={handleChange}
               suffix="%"
+              step="0.1"
             />
           </div>
         </div>
@@ -231,6 +235,7 @@ export default function FinancialForm() {
               value={form.interestRate}
               onChange={handleChange}
               suffix="%"
+              step="0.1"
             />
             <InputField
               label="Loan Term"
