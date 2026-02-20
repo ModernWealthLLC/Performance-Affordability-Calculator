@@ -525,17 +525,17 @@ export default function ResultsDashboard({
 
     for (const [term, definition] of glossary) {
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(30, 30, 30);
       doc.text(term, 20, y);
-      y += 4;
+      y += 3.5;
 
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.5);
+      doc.setFontSize(8);
       doc.setTextColor(90, 90, 90);
       const defLines = doc.splitTextToSize(definition, textWidth - 5);
       doc.text(defLines, 22, y);
-      y += defLines.length * 3.5 + 3.5;
+      y += defLines.length * 3 + 2.5;
     }
 
     // --- Page 2 Footer ---
