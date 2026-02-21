@@ -774,6 +774,22 @@ export default function ResultsDashboard({
         "FI Delay",
         "The additional number of years it will take to reach financial independence as a result of owning this vehicle, compared to not owning it.",
       ],
+      [
+        "Wealth Stage Indicator",
+        "A classification derived from your Car-to-Net-Worth and Car-to-Investable Assets ratios. Stages range from Established (lowest ratios, strongest positioning) to Pre-Foundation (highest ratios, weakest positioning).",
+      ],
+      [
+        "Liquidity Stress Indicator",
+        "A measure of how vehicle ownership impacts your savings capacity, derived from your Savings Rate. Ranges from Low (25%+ savings rate) to High (below 5%), reflecting the pressure the purchase places on your cash flow.",
+      ],
+      [
+        "Corner Exit Projection\u2122",
+        "A side-by-side comparison of your projected investment portfolio at retirement with and without this vehicle purchase, illustrating the long-term wealth impact of the decision.",
+      ],
+      [
+        "Apex Status",
+        "The performance tier assigned based on your APEX Score. Tiers indicate how well the vehicle purchase aligns with your overall financial trajectory.",
+      ],
     ];
 
     for (const [term, definition] of glossary) {
