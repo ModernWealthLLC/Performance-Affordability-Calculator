@@ -13,7 +13,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function postHeight() {
+                  var height = document.documentElement.scrollHeight;
+                  window.parent.postMessage({ type: 'apex-resize', height: height }, '*');
+                }
+                window.addEventListener('load', postHeight);
+                window.addEventListener('resize', postHeight);
+                var observer = new MutationObserver(postHeight);
+                document.addEventListener('DOMContentLoaded', function() {
+                  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+                });
+                setInterval(postHeight, 500);
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="bg-white text-gray-900 antialiased">
         <header className="bg-white pt-16 pb-10">
           <div className="max-w-6xl mx-auto px-6 text-center">
             <h1 className="text-4xl md:text-5xl font-light tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
