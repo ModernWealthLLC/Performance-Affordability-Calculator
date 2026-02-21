@@ -494,6 +494,23 @@ export default function ResultsDashboard({
     });
     y += 6;
 
+    // Schedule an Exploration Call button
+    const callBtnText = "Schedule an Exploration Call";
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    const callBtnWidth = doc.getTextWidth(callBtnText) + 16;
+    const callBtnHeight = 9;
+    const callBtnX = pageWidth / 2 - callBtnWidth / 2;
+    doc.setFillColor(15, 72, 127);
+    doc.roundedRect(callBtnX, y - 1, callBtnWidth, callBtnHeight, 2, 2, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.text(callBtnText, pageWidth / 2, y + 5, { align: "center" });
+    doc.link(callBtnX, y - 1, callBtnWidth, callBtnHeight, {
+      url: "https://calendly.com/modernwealthllc/intro-call",
+    });
+    doc.setTextColor(15, 72, 127);
+    y += callBtnHeight + 4;
+
     // Accent line under title
     doc.setDrawColor(15, 72, 127);
     doc.setLineWidth(0.6);
@@ -832,8 +849,8 @@ export default function ResultsDashboard({
 
   return (
     <div className="space-y-8">
-      {/* Download PDF button */}
-      <div className="flex justify-end">
+      {/* Download PDF + Schedule Call buttons */}
+      <div className="flex justify-end gap-3">
         <button
           onClick={handleDownloadPDF}
           className="flex items-center gap-2 text-sm font-medium text-[#0f487f] border border-[#0f487f] hover:bg-[#0f487f] hover:text-white px-5 py-2.5 rounded-lg transition-colors"
@@ -854,6 +871,28 @@ export default function ResultsDashboard({
           </svg>
           Download APEX Report
         </button>
+        <a
+          href="https://calendly.com/modernwealthllc/intro-call"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-sm font-medium text-white bg-[#0f487f] hover:bg-[#0a3560] px-5 py-2.5 rounded-lg transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          Schedule an Exploration Call
+        </a>
       </div>
 
       {/* Vehicle label */}
