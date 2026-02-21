@@ -130,6 +130,11 @@ export default function FinancialForm() {
     if (!isNaN(age) && !isNaN(retAge) && retAge <= age) {
       errs.push("Target retirement age must be greater than current age.");
     }
+    const pp = parseFloat(form.purchasePrice);
+    const dp = parseFloat(form.downPayment);
+    if (!isNaN(pp) && !isNaN(dp) && dp > pp) {
+      errs.push("Down payment cannot exceed the purchase price.");
+    }
     return errs;
   }
 
