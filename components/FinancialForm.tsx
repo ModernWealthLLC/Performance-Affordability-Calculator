@@ -156,7 +156,25 @@ export default function FinancialForm() {
     fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email }),
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        annualIncome: form.annualIncome,
+        investableAssets: form.investableAssets,
+        totalNetWorth: form.totalNetWorth,
+        vehicleMake: form.vehicleMake,
+        vehicleModel: form.vehicleModel,
+        purchasePrice: form.purchasePrice,
+        downPayment: form.downPayment,
+        interestRate: form.interestRate,
+        loanTermYears: form.loanTermYears,
+        annualMaintenance: form.annualMaintenance,
+        annualInsurance: form.annualInsurance,
+        annualTrackBudget: form.annualTrackBudget,
+        holdPeriodYears: form.holdPeriodYears,
+        expectedResalePercent: form.expectedResalePercent,
+      }),
     }).catch(() => {
       // Silently ignore — CRM sync is best-effort
     });

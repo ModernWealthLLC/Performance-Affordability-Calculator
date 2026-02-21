@@ -9,7 +9,25 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { firstName, lastName, email } = await req.json();
+  const {
+    firstName,
+    lastName,
+    email,
+    annualIncome,
+    investableAssets,
+    totalNetWorth,
+    vehicleMake,
+    vehicleModel,
+    purchasePrice,
+    downPayment,
+    interestRate,
+    loanTermYears,
+    annualMaintenance,
+    annualInsurance,
+    annualTrackBudget,
+    holdPeriodYears,
+    expectedResalePercent,
+  } = await req.json();
 
   if (!firstName || !lastName || !email) {
     return NextResponse.json(
@@ -17,6 +35,19 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+
+  const vehicleInfo = [
+    `Vehicle: ${vehicleMake || ""} ${vehicleModel || ""}`.trim(),
+    `Purchase Price: $${Number(purchasePrice || 0).toLocaleString()}`,
+    `Down Payment: $${Number(downPayment || 0).toLocaleString()}`,
+    `Interest Rate: ${interestRate || 0}%`,
+    `Loan Term: ${loanTermYears || 0} years`,
+    `Annual Maintenance: $${Number(annualMaintenance || 0).toLocaleString()}`,
+    `Annual Insurance: $${Number(annualInsurance || 0).toLocaleString()}`,
+    `Annual Track + Modification Budget: $${Number(annualTrackBudget || 0).toLocaleString()}`,
+    `Holding Period: ${holdPeriodYears || 0} years`,
+    `Expected Resale: ${expectedResalePercent || 0}%`,
+  ].join("\n");
 
   const res = await fetch("https://api.crmworkspace.com/v1/contacts", {
     method: "POST",
@@ -31,6 +62,10 @@ export async function POST(req: NextRequest) {
       type: "Person",
       contact_source: "APEX Calculator",
       tags: ["APEX Report"],
+      gross_annual_income: annualIncome ? Number(annualIncome) : undefined,
+      assets: investableAssets ? Number(investableAssets) : undefined,
+      estimated_net_worth: totalNetWorth ? Number(totalNetWorth) : undefined,
+      important_information: vehicleInfo,
     }),
   });
 
