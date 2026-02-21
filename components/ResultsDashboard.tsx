@@ -247,16 +247,16 @@ export default function ResultsDashboard({
     let executionRecs: string[];
     if (apexScore < 50) {
       executionRecs = [
-        "\u2022 Recommend ownership restructuring to reduce financial load factor",
-        "\u2022 Recommend hold period reduction to limit compounding drag",
-        "\u2022 Recommend financing optimization to lower annual cost of carry",
-        "\u2022 Evaluate alternative vehicle scenarios to improve trajectory alignment",
+        "\u2022 Ownership restructuring may reduce financial load factor",
+        "\u2022 A shorter hold period could limit compounding drag",
+        "\u2022 Financing optimization may lower annual cost of carry",
+        "\u2022 Alternative vehicle scenarios worth evaluating to improve trajectory alignment",
       ];
     } else if (apexScore <= 75) {
       executionRecs = [
         "\u2022 Continue monitoring current cost-to-income positioning",
-        "\u2022 Implement targeted savings offsets to counterbalance vehicle expenses",
-        "\u2022 Consider depreciation mitigation strategy (shorter hold, higher resale retention)",
+        "\u2022 Targeted savings offsets may counterbalance vehicle expenses",
+        "\u2022 Depreciation mitigation strategy worth considering (shorter hold, higher resale retention)",
       ];
     } else {
       executionRecs = [
@@ -330,12 +330,6 @@ export default function ResultsDashboard({
     doc.text(String(results.apexScore), gaugeCx, gaugeCy + 2, {
       align: "center",
     });
-
-    // "/ 100" below score
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(160, 160, 160);
-    doc.text("/ 100", gaugeCx, gaugeCy + 8, { align: "center" });
 
     // "Apex Status: [Tier Name]" below gauge
     doc.setFontSize(9);
@@ -629,16 +623,6 @@ export default function ResultsDashboard({
     renderSection("The Long-Term Impact", p3);
     renderSection("Considerations", p4);
 
-    // --- Signature Closing Statement ---
-    y += 2;
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bolditalic");
-    doc.setTextColor(15, 72, 127);
-    doc.text("Performance is not the problem. Poor positioning is.", pageWidth / 2, y, {
-      align: "center",
-    });
-    y += 10;
-
     renderSection(
       "Disclaimer",
       "Modern Wealth does not offer tax, legal, or accounting advice. The information provided here is purely for your understanding and should not be used as a basis for these topics. " +
@@ -820,16 +804,16 @@ export default function ResultsDashboard({
   let executionRecs: string[];
   if (apexScore < 50) {
     executionRecs = [
-      "Recommend ownership restructuring to reduce financial load factor",
-      "Recommend hold period reduction to limit compounding drag",
-      "Recommend financing optimization to lower annual cost of carry",
-      "Evaluate alternative vehicle scenarios to improve trajectory alignment",
+      "Ownership restructuring may reduce financial load factor",
+      "A shorter hold period could limit compounding drag",
+      "Financing optimization may lower annual cost of carry",
+      "Alternative vehicle scenarios worth evaluating to improve trajectory alignment",
     ];
   } else if (apexScore <= 75) {
     executionRecs = [
       "Continue monitoring current cost-to-income positioning",
-      "Implement targeted savings offsets to counterbalance vehicle expenses",
-      "Consider depreciation mitigation strategy (shorter hold, higher resale retention)",
+      "Targeted savings offsets may counterbalance vehicle expenses",
+      "Depreciation mitigation strategy worth considering (shorter hold, higher resale retention)",
     ];
   } else {
     executionRecs = [
