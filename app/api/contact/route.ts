@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
       email_addresses: [{ address: email, kind: "Work" }],
       type: "Person",
       contact_source: "APEX Calculator",
+      tags: ["APEX Report"],
     }),
   });
 
