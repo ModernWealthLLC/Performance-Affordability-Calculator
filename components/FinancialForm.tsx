@@ -151,6 +151,16 @@ export default function FinancialForm() {
 
   function handleContactSubmit(firstName: string, lastName: string, email: string) {
     setShowContactModal(false);
+
+    // Send contact to Wealthbox CRM (fire-and-forget, don't block navigation)
+    fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstName, lastName, email }),
+    }).catch(() => {
+      // Silently ignore — CRM sync is best-effort
+    });
+
     const params = new URLSearchParams();
     for (const [key, val] of Object.entries(form)) {
       params.set(key, val);
