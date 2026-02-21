@@ -6,6 +6,9 @@ export default function Home() {
   return (
     <div>
       <div className="mb-10">
+        <h1 className="text-2xl font-bold tracking-tight mb-4 text-[#0f487f]">
+          The APEX Report&trade;
+        </h1>
         <h2 className="text-3xl font-bold tracking-tight mb-2 text-gray-900">
           Can You <span className="text-[#0f487f]">Really</span> Afford That Car?
         </h2>
