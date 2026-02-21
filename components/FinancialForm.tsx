@@ -27,25 +27,25 @@ interface FormState {
 }
 
 const defaultState: FormState = {
-  currentAge: "",
-  targetRetirementAge: "",
-  annualIncome: "",
-  annualSavings: "",
-  investableAssets: "",
-  totalNetWorth: "",
-  targetRetirementSpending: "",
-  expectedReturn: "",
-  vehicleMake: "",
-  vehicleModel: "",
-  purchasePrice: "",
-  downPayment: "",
-  interestRate: "",
-  loanTermYears: "",
-  annualMaintenance: "",
-  annualInsurance: "",
-  annualTrackBudget: "",
-  holdPeriodYears: "",
-  expectedResalePercent: "",
+  currentAge: "40",
+  targetRetirementAge: "67",
+  annualIncome: "500000",
+  annualSavings: "100000",
+  investableAssets: "1000000",
+  totalNetWorth: "2500000",
+  targetRetirementSpending: "180000",
+  expectedReturn: "7",
+  vehicleMake: "Mazda",
+  vehicleModel: "Miata",
+  purchasePrice: "40000",
+  downPayment: "8000",
+  interestRate: "5.5",
+  loanTermYears: "5",
+  annualMaintenance: "1000",
+  annualInsurance: "1500",
+  annualTrackBudget: "5000",
+  holdPeriodYears: "3",
+  expectedResalePercent: "60",
 };
 
 function InputField({
@@ -244,7 +244,7 @@ export default function FinancialForm() {
           <div className="glass-panel card-hover p-6">
             <h3 className="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-900">
               <span className="w-2 h-2 rounded-full bg-[#0f487f]" />
-              Vehicle Cost Profile
+              Vehicle Profile
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -313,14 +313,14 @@ export default function FinancialForm() {
                 prefix="$"
               />
               <InputField
-                label="Annual Track Budget"
+                label="Annual Track + Modification Budget"
                 name="annualTrackBudget"
                 value={form.annualTrackBudget}
                 onChange={handleChange}
                 prefix="$"
               />
               <InputField
-                label="Hold Period"
+                label="Holding Period"
                 name="holdPeriodYears"
                 value={form.holdPeriodYears}
                 onChange={handleChange}

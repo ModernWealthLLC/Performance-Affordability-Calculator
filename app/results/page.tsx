@@ -18,26 +18,26 @@ function ResultsContent() {
   }
 
   const personal: PersonalInputs = {
-    currentAge: num("currentAge", 30),
-    targetRetirementAge: num("targetRetirementAge", 55),
-    annualIncome: num("annualIncome", 150000),
-    annualSavings: num("annualSavings", 40000),
-    investableAssets: num("investableAssets", 200000),
-    totalNetWorth: num("totalNetWorth", 350000),
-    targetRetirementSpending: num("targetRetirementSpending", 80000),
+    currentAge: num("currentAge", 40),
+    targetRetirementAge: num("targetRetirementAge", 67),
+    annualIncome: num("annualIncome", 500000),
+    annualSavings: num("annualSavings", 100000),
+    investableAssets: num("investableAssets", 1000000),
+    totalNetWorth: num("totalNetWorth", 2500000),
+    targetRetirementSpending: num("targetRetirementSpending", 180000),
     expectedReturn: num("expectedReturn", 7),
   };
 
   const vehicle: VehicleInputs = {
-    purchasePrice: num("purchasePrice", 85000),
-    downPayment: num("downPayment", 20000),
-    interestRate: num("interestRate", 6.5),
+    purchasePrice: num("purchasePrice", 40000),
+    downPayment: num("downPayment", 8000),
+    interestRate: num("interestRate", 5.5),
     loanTermYears: num("loanTermYears", 5),
-    annualMaintenance: num("annualMaintenance", 2000),
-    annualInsurance: num("annualInsurance", 2400),
-    annualTrackBudget: num("annualTrackBudget", 3000),
-    holdPeriodYears: num("holdPeriodYears", 5),
-    expectedResalePercent: num("expectedResalePercent", 55),
+    annualMaintenance: num("annualMaintenance", 1000),
+    annualInsurance: num("annualInsurance", 1500),
+    annualTrackBudget: num("annualTrackBudget", 5000),
+    holdPeriodYears: num("holdPeriodYears", 3),
+    expectedResalePercent: num("expectedResalePercent", 60),
   };
 
   const firstName = searchParams.get("firstName") || "";
