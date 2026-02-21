@@ -108,7 +108,7 @@ export default function ResultsDashboard({
   const handleDownloadPDF = useCallback(async () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 15;
+    let y = 10;
 
     // --- Logo ---
     const logoData = await loadLogoAsBase64();
@@ -117,7 +117,7 @@ export default function ResultsDashboard({
       const logoHeight = 19;
       const logoX = (pageWidth - logoWidth) / 2;
       doc.addImage(logoData, "PNG", logoX, y, logoWidth, logoHeight);
-      y += logoHeight + 8;
+      y += logoHeight + 5;
     }
 
     // --- Title ---
@@ -126,7 +126,7 @@ export default function ResultsDashboard({
     doc.text("The APEX Report\u2122", pageWidth / 2, y, {
       align: "center",
     });
-    y += 7;
+    y += 6;
 
     // --- Subtitle ---
     doc.setFontSize(9);
@@ -135,14 +135,14 @@ export default function ResultsDashboard({
     doc.text("Are You Hitting the Financial Apex?", pageWidth / 2, y, {
       align: "center",
     });
-    y += 4;
+    y += 3.5;
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(120, 120, 120);
     doc.text("Affordability \u2022 Positioning \u2022 Efficiency \u2022 eXecution", pageWidth / 2, y, {
       align: "center",
     });
-    y += 8;
+    y += 6;
 
     // --- User Info (single line: name + email) ---
     const fullName = `${firstName} ${lastName}`.trim();
@@ -157,7 +157,7 @@ export default function ResultsDashboard({
             ? `Prepared for: ${fullName}`
             : email;
       doc.text(userLine, pageWidth / 2, y, { align: "center" });
-      y += 6;
+      y += 5;
     }
 
     // --- Vehicle Info ---
@@ -166,35 +166,35 @@ export default function ResultsDashboard({
       doc.setFont("helvetica", "normal");
       doc.setTextColor(80, 80, 80);
       doc.text(`Vehicle: ${vehicleLabel}`, pageWidth / 2, y, { align: "center" });
-      y += 6;
+      y += 5;
     }
 
     // --- Divider ---
-    y += 2;
+    y += 1;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // Helper: render a pillar section header
     const renderPillarHeader = (title: string) => {
-      doc.setFontSize(11);
+      doc.setFontSize(10);
       doc.setTextColor(15, 72, 127);
       doc.setFont("helvetica", "bold");
       doc.text(title, 20, y);
-      y += 6;
+      y += 5;
     };
 
     // Helper: render a metric row
     const renderMetricRow = (label: string, value: string) => {
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9.5);
+      doc.setFontSize(9);
       doc.setTextColor(120, 120, 120);
       doc.text(label, 25, y);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(30, 30, 30);
       doc.text(value, pageWidth - 25, y, { align: "right" });
-      y += 5.5;
+      y += 4.5;
     };
 
     // Derive Wealth Stage Indicator
@@ -220,14 +220,14 @@ export default function ResultsDashboard({
     renderMetricRow("True Annual Cost", formatCurrency(results.trueAnnualCost));
     renderMetricRow("Savings Rate", `${results.savingsRate.toFixed(1)}%`);
     renderMetricRow("FI Delay", `${results.fiDelayYears.toFixed(1)} years`);
-    y += 2;
+    y += 1;
 
     // === P — Positioning ===
     renderPillarHeader("P \u2014 Positioning");
     renderMetricRow("Car-to-Investable Assets", `${results.carToInvestablePercent.toFixed(1)}%`);
     renderMetricRow("Wealth Stage Indicator", wealthStage);
     renderMetricRow("Liquidity Stress Indicator", liquidityStress);
-    y += 2;
+    y += 1;
 
     // === E — Efficiency ===
     renderPillarHeader("E \u2014 Efficiency");
@@ -235,7 +235,7 @@ export default function ResultsDashboard({
     renderMetricRow("Opportunity Cost of Purchase", formatCurrency(results.fvPurchase));
     renderMetricRow("Opportunity Cost of Annual Expenses", formatCurrency(results.fvAnnualCost));
     renderMetricRow("Total Opportunity Cost", formatCurrency(results.opportunityCost));
-    y += 2;
+    y += 1;
 
     // === X — Execution ===
     renderPillarHeader("X \u2014 Execution");
@@ -269,14 +269,14 @@ export default function ResultsDashboard({
     for (const rec of executionRecs) {
       const recLines = doc.splitTextToSize(rec, pageWidth - 50);
       doc.text(recLines, 25, y);
-      y += recLines.length * 4 + 1.5;
+      y += recLines.length * 3.5 + 1;
     }
-    y += 2;
+    y += 1;
 
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.3);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // === TWO-COLUMN: APEX Score Gauge (left) + Corner Exit Projection (right) ===
     const colStartY = y;
@@ -284,14 +284,14 @@ export default function ResultsDashboard({
     const rightColX = pageWidth / 2 + 5;
 
     // --- LEFT: APEX Score Gauge ---
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("APEX Score\u2122", leftColX, y);
 
     const gaugeCx = leftColX + 38;
-    const gaugeCy = y + 24;
-    const gaugeRadius = 18;
+    const gaugeCy = y + 20;
+    const gaugeRadius = 16;
     const gaugeStartAngle = (3 * Math.PI) / 4;
     const gaugeTotalAngle = (3 * Math.PI) / 2;
 
@@ -343,14 +343,14 @@ export default function ResultsDashboard({
     );
 
     // --- RIGHT: Corner Exit Projection ---
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Corner Exit Projection\u2122", rightColX, colStartY);
 
-    const chartY = colStartY + 10;
+    const chartY = colStartY + 8;
     const barMaxWidth = 55;
-    const barHeight = 10;
+    const barHeight = 8;
     const maxPortfolio = Math.max(results.fvNoCar, results.fvWithCar);
 
     // "Clean Exit Velocity" bar
@@ -374,7 +374,7 @@ export default function ResultsDashboard({
     );
 
     // "Reduced Exit Velocity" bar
-    const bar2Y = chartY + barHeight + 10;
+    const bar2Y = chartY + barHeight + 8;
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
@@ -395,7 +395,7 @@ export default function ResultsDashboard({
     );
 
     // Difference label
-    const diffY = bar2Y + barHeight + 8;
+    const diffY = bar2Y + barHeight + 6;
     const diff = results.fvNoCar - results.fvWithCar;
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
@@ -403,19 +403,19 @@ export default function ResultsDashboard({
     doc.text(`Difference: ${formatCurrency(diff)}`, rightColX, diffY);
 
     // Move y past the two-column section
-    y = Math.max(gaugeCy + gaugeRadius + 14, diffY + 6);
-    y += 4;
+    y = Math.max(gaugeCy + gaugeRadius + 12, diffY + 4);
+    y += 2;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.3);
     doc.line(20, y, pageWidth - 20, y);
-    y += 8;
+    y += 6;
 
     // === DETAILED BREAKDOWN ===
-    doc.setFontSize(13);
+    doc.setFontSize(12);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
     doc.text("Detailed Breakdown", 20, y);
-    y += 8;
+    y += 6;
 
     const details = [
       ["FI Number (4% Rule)", formatCurrency(results.fiNumber)],
@@ -454,15 +454,15 @@ export default function ResultsDashboard({
         doc.setTextColor(30, 30, 30);
       }
       doc.text(value, pageWidth - 25, y, { align: "right" });
-      y += 6.5;
+      y += 5.5;
     }
 
     // --- Footer ---
-    y += 4;
+    y += 2;
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
-    y += 5;
+    y += 4;
 
     doc.setFontSize(8);
     doc.setTextColor(160, 160, 160);
