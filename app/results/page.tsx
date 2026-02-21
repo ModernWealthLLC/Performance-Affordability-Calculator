@@ -54,9 +54,6 @@ function ResultsContent() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight mb-4 text-[#0f487f]">
-            The APEX Report&trade;
-          </h1>
           <h2 className="text-3xl font-bold tracking-tight mb-1 text-gray-900">
             {firstName ? (
               <>{firstName}, here are your <span className="text-[#0f487f]">Results</span></>
