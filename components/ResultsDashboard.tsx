@@ -220,7 +220,7 @@ export default function ResultsDashboard({
     renderMetricRow("Car-to-Net-Worth", `${results.carToNetWorthPercent.toFixed(1)}%`);
     renderMetricRow("True Annual Cost", formatCurrency(results.trueAnnualCost));
     renderMetricRow("Savings Rate", `${results.savingsRate.toFixed(1)}%`);
-    renderMetricRow("FI Delay", `${results.fiDelayYears.toFixed(1)} years`);
+    renderMetricRow("FI Delay", `${Math.round(results.fiDelayYears)} ${Math.round(results.fiDelayYears) === 1 ? "year" : "years"}`);
     y += 1;
 
     // === P — Positioning ===
@@ -533,7 +533,8 @@ export default function ResultsDashboard({
     const fvNo = formatCurrency(results.fvNoCar);
     const fvWith = formatCurrency(results.fvWithCar);
     const fvDiff = formatCurrency(results.fvNoCar - results.fvWithCar);
-    const fiDelay = results.fiDelayYears.toFixed(1);
+    const fiDelayRounded = Math.round(results.fiDelayYears);
+    const fiDelay = `${fiDelayRounded} ${fiDelayRounded === 1 ? "year" : "years"}`;
 
     const renderSection = (title: string, body: string) => {
       doc.setFontSize(12);
@@ -566,7 +567,7 @@ export default function ResultsDashboard({
 
       p3 =
         `Every vehicle carries an opportunity cost. If the total cost of this car were deployed into investments instead, your corner exit projection would be ${fvNo} rather than ${fvWith}, a delta of ${fvDiff}. ` +
-        `However, your financial independence timeline shifts by only approximately ${fiDelay} years, a minimal adjustment that confirms this purchase is well within your performance envelope. ` +
+        `However, your financial independence timeline shifts by only approximately ${fiDelay}, a minimal adjustment that confirms this purchase is well within your performance envelope. ` +
         `The exit velocity remains strong, and the trajectory holds its line.`;
 
       p4 =
@@ -588,7 +589,7 @@ export default function ResultsDashboard({
 
       p3 =
         `The opportunity cost is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your corner exit projection would reach ${fvNo} compared to the projected ${fvWith} with the vehicle, a gap of ${fvDiff}. ` +
-        `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable delta, it is significant enough to warrant monitoring your total vehicle costs annually and ensuring they remain within comfortable parameters as your financial positioning evolves.`;
+        `This translates to a financial independence delay of roughly ${fiDelay}. While this is a manageable delta, it is significant enough to warrant monitoring your total vehicle costs annually and ensuring they remain within comfortable parameters as your financial positioning evolves.`;
 
       p4 =
         `Based on these results, maintaining your current trajectory while looking for optimization opportunities makes sense, ${displayName}. ` +
@@ -609,7 +610,7 @@ export default function ResultsDashboard({
 
       p3 =
         `The opportunity cost reveals the long-term trade-off. Without this vehicle, your corner exit projection would be ${fvNo}, compared to ${fvWith} with it, a difference of ${fvDiff} in future wealth. ` +
-        `Your financial independence is delayed by approximately ${fiDelay} years as a direct result. This introduces compounding drag that grows larger with time. ` +
+        `Your financial independence is delayed by approximately ${fiDelay} as a direct result. This introduces compounding drag that grows larger with time. ` +
         `Each year of delay reduces exit velocity and extends the mandatory work period before you can transition on your own terms.`;
 
       p4 =
@@ -630,7 +631,7 @@ export default function ResultsDashboard({
 
       p3 =
         `The long-term trajectory shift is significant. Without this vehicle, your corner exit projection would be ${fvNo}, but with the vehicle it drops to ${fvWith}, a reduction of ${fvDiff} in lifetime wealth. ` +
-        `Your path to financial independence is delayed by approximately ${fiDelay} years. This extends your mandatory work timeline, reduces exit velocity, and narrows the margin available for unexpected life events. ` +
+        `Your path to financial independence is delayed by approximately ${fiDelay}. This extends your mandatory work timeline, reduces exit velocity, and narrows the margin available for unexpected life events. ` +
         `The compounding effect of these deferred investment years is difficult to recover once the window has passed.`;
 
       p4 =
@@ -935,7 +936,7 @@ export default function ResultsDashboard({
           />
           <StatCard
             label="FI Delay"
-            value={`${results.fiDelayYears.toFixed(1)} years`}
+            value={`${Math.round(results.fiDelayYears)} ${Math.round(results.fiDelayYears) === 1 ? "year" : "years"}`}
             sub={`${results.yearsToFiNoCar}yr \u2192 ${results.yearsToFiWithCar}yr to FI`}
           />
         </div>
