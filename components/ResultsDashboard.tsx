@@ -118,6 +118,7 @@ export default function ResultsDashboard({
     const logoY = 5;
     if (logoData) {
       doc.addImage(logoData, "PNG", logoX, logoY, logoWidth, logoHeight);
+      doc.link(logoX, logoY, logoWidth, logoHeight, { url: "https://www.modernwealthllc.com" });
     }
     y = logoY + logoHeight + 4;
 
@@ -481,6 +482,7 @@ export default function ResultsDashboard({
     doc.addPage();
     if (logoData) {
       doc.addImage(logoData, "PNG", logoX, logoY, logoWidth, logoHeight);
+      doc.link(logoX, logoY, logoWidth, logoHeight, { url: "https://www.modernwealthllc.com" });
     }
     y = logoY + logoHeight + 4;
     const textWidth = pageWidth - 40;
@@ -673,6 +675,7 @@ export default function ResultsDashboard({
     doc.addPage();
     if (logoData) {
       doc.addImage(logoData, "PNG", logoX, logoY, logoWidth, logoHeight);
+      doc.link(logoX, logoY, logoWidth, logoHeight, { url: "https://www.modernwealthllc.com" });
     }
     y = logoY + logoHeight + 4;
 
