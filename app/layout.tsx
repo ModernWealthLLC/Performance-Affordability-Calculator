@@ -2,8 +2,35 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "The APEX Report\u2122 | APEX Financial Performance Engine",
-  description: "Are you hitting the financial apex? Affordability, Positioning, Efficiency, eXecution.",
+  title: "The APEX Report™ | APEX Financial Performance Engine",
+  description:
+    "Modern Wealth's APEX Calculator™ reveals the true financial cost of your next vehicle purchase. Analyze affordability, opportunity cost, savings impact, and financial independence timeline — get your free personalized APEX Report instantly.",
+  openGraph: {
+    title: "The APEX Report™ | Are You Hitting the Financial Apex?",
+    description:
+      "Discover the true financial cost of your next vehicle. Analyze affordability, opportunity cost, savings impact, and your financial independence timeline with Modern Wealth's free APEX Calculator.",
+    siteName: "Modern Wealth",
+    type: "website",
+    url: "https://www.modernwealthllc.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The APEX Report™ | APEX Financial Performance Engine",
+    description:
+      "Discover the true financial cost of your next vehicle. Analyze affordability, opportunity cost, savings impact, and your financial independence timeline.",
+  },
+  keywords: [
+    "car affordability calculator",
+    "vehicle financial impact",
+    "opportunity cost calculator",
+    "financial independence",
+    "APEX Report",
+    "Modern Wealth",
+    "performance vehicle affordability",
+    "car buying calculator",
+    "wealth impact analysis",
+    "financial planning tool",
+  ],
 };
 
 export default function RootLayout({
