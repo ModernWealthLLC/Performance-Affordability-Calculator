@@ -90,8 +90,8 @@ function drawGaugeArc(
 }
 
 function getScoreColor(score: number): [number, number, number] {
-  if (score >= 85) return [34, 197, 94];
-  if (score >= 70) return [59, 130, 246];
+  if (score >= 80) return [34, 197, 94];
+  if (score >= 65) return [59, 130, 246];
   if (score >= 50) return [245, 158, 11];
   return [239, 68, 68];
 }
@@ -123,10 +123,26 @@ export default function ResultsDashboard({
     // --- Title ---
     doc.setFontSize(20);
     doc.setTextColor(15, 72, 127);
-    doc.text("Performance Affordability Report", pageWidth / 2, y, {
+    doc.text("The APEX Report\u2122", pageWidth / 2, y, {
       align: "center",
     });
-    y += 10;
+    y += 7;
+
+    // --- Subtitle ---
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Are You Hitting the Financial Apex?", pageWidth / 2, y, {
+      align: "center",
+    });
+    y += 4;
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(120, 120, 120);
+    doc.text("Affordability \u2022 Positioning \u2022 Efficiency \u2022 eXecution", pageWidth / 2, y, {
+      align: "center",
+    });
+    y += 8;
 
     // --- User Info (single line: name + email) ---
     const fullName = `${firstName} ${lastName}`.trim();
@@ -160,51 +176,118 @@ export default function ResultsDashboard({
     doc.line(20, y, pageWidth - 20, y);
     y += 8;
 
-    // === KEY METRICS ===
-    doc.setFontSize(13);
-    doc.setTextColor(15, 72, 127);
-    doc.setFont("helvetica", "bold");
-    doc.text("Key Metrics", 20, y);
-    y += 8;
+    // Helper: render a pillar section header
+    const renderPillarHeader = (title: string) => {
+      doc.setFontSize(11);
+      doc.setTextColor(15, 72, 127);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, 20, y);
+      y += 6;
+    };
 
-    const metrics = [
-      ["Car-to-Net-Worth", `${results.carToNetWorthPercent.toFixed(1)}%`],
-      ["True Annual Cost", formatCurrency(results.trueAnnualCost)],
-      ["FI Delay", `${results.fiDelayYears.toFixed(1)} years`],
-      ["Savings Rate", `${results.savingsRate.toFixed(1)}%`],
-      [
-        "Discipline Score",
-        `${results.disciplineScore} / 100 (${results.disciplineCategory})`,
-      ],
-    ];
-
-    for (const [label, value] of metrics) {
+    // Helper: render a metric row
+    const renderMetricRow = (label: string, value: string) => {
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFontSize(9.5);
       doc.setTextColor(120, 120, 120);
       doc.text(label, 25, y);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(30, 30, 30);
       doc.text(value, pageWidth - 25, y, { align: "right" });
-      y += 6.5;
+      y += 5.5;
+    };
+
+    // Derive Wealth Stage Indicator
+    const carNWPct = results.carToNetWorthPercent;
+    const carInvPct = results.carToInvestablePercent;
+    let wealthStage: string;
+    if (carNWPct <= 5 && carInvPct <= 10) wealthStage = "Established";
+    else if (carNWPct <= 15 && carInvPct <= 25) wealthStage = "Building";
+    else if (carNWPct <= 30 && carInvPct <= 50) wealthStage = "Early Stage";
+    else wealthStage = "Pre-Foundation";
+
+    // Derive Liquidity Stress Indicator
+    const savRateVal = results.savingsRate;
+    let liquidityStress: string;
+    if (savRateVal >= 25) liquidityStress = "Low";
+    else if (savRateVal >= 15) liquidityStress = "Moderate";
+    else if (savRateVal >= 5) liquidityStress = "Elevated";
+    else liquidityStress = "High";
+
+    // === A — Affordability ===
+    renderPillarHeader("A \u2014 Affordability");
+    renderMetricRow("Car-to-Net-Worth", `${results.carToNetWorthPercent.toFixed(1)}%`);
+    renderMetricRow("True Annual Cost", formatCurrency(results.trueAnnualCost));
+    renderMetricRow("Savings Rate", `${results.savingsRate.toFixed(1)}%`);
+    renderMetricRow("FI Delay", `${results.fiDelayYears.toFixed(1)} years`);
+    y += 2;
+
+    // === P — Positioning ===
+    renderPillarHeader("P \u2014 Positioning");
+    renderMetricRow("Car-to-Investable Assets", `${results.carToInvestablePercent.toFixed(1)}%`);
+    renderMetricRow("Wealth Stage Indicator", wealthStage);
+    renderMetricRow("Liquidity Stress Indicator", liquidityStress);
+    y += 2;
+
+    // === E — Efficiency ===
+    renderPillarHeader("E \u2014 Efficiency");
+    renderMetricRow("Annual Depreciation", formatCurrency(results.annualDepreciation));
+    renderMetricRow("Opportunity Cost of Purchase", formatCurrency(results.fvPurchase));
+    renderMetricRow("Opportunity Cost of Annual Expenses", formatCurrency(results.fvAnnualCost));
+    renderMetricRow("Total Opportunity Cost", formatCurrency(results.opportunityCost));
+    y += 2;
+
+    // === X — Execution ===
+    renderPillarHeader("X \u2014 Execution");
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(55, 55, 55);
+
+    const apexScore = results.apexScore;
+    let executionRecs: string[];
+    if (apexScore < 50) {
+      executionRecs = [
+        "\u2022 Recommend ownership restructuring to reduce financial load factor",
+        "\u2022 Recommend hold period reduction to limit compounding drag",
+        "\u2022 Recommend financing optimization to lower annual cost of carry",
+        "\u2022 Evaluate alternative vehicle scenarios to improve trajectory alignment",
+      ];
+    } else if (apexScore <= 75) {
+      executionRecs = [
+        "\u2022 Continue monitoring current cost-to-income positioning",
+        "\u2022 Implement targeted savings offsets to counterbalance vehicle expenses",
+        "\u2022 Consider depreciation mitigation strategy (shorter hold, higher resale retention)",
+      ];
+    } else {
+      executionRecs = [
+        "\u2022 Purchase is well-aligned with current financial trajectory",
+        "\u2022 Optional: explore prepayment acceleration to reduce total interest load",
+        "\u2022 Optional: redirect depreciation savings toward tax-advantaged accounts",
+      ];
     }
 
-    y += 4;
+    for (const rec of executionRecs) {
+      const recLines = doc.splitTextToSize(rec, pageWidth - 50);
+      doc.text(recLines, 25, y);
+      y += recLines.length * 4 + 1.5;
+    }
+    y += 2;
+
     doc.setDrawColor(207, 207, 207);
     doc.setLineWidth(0.3);
     doc.line(20, y, pageWidth - 20, y);
     y += 8;
 
-    // === TWO-COLUMN: Discipline Score Gauge (left) + Portfolio Chart (right) ===
+    // === TWO-COLUMN: APEX Score Gauge (left) + Corner Exit Projection (right) ===
     const colStartY = y;
     const leftColX = 20;
     const rightColX = pageWidth / 2 + 5;
 
-    // --- LEFT: Discipline Score Gauge ---
+    // --- LEFT: APEX Score Gauge ---
     doc.setFontSize(12);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
-    doc.text("Discipline Score", leftColX, y);
+    doc.text("APEX Score\u2122", leftColX, y);
 
     const gaugeCx = leftColX + 38;
     const gaugeCy = y + 24;
@@ -225,8 +308,8 @@ export default function ResultsDashboard({
     );
 
     // Score arc (colored)
-    const scoreColor = getScoreColor(results.disciplineScore);
-    const scoreRatio = Math.min(results.disciplineScore / 100, 1);
+    const scoreColor = getScoreColor(results.apexScore);
+    const scoreRatio = Math.min(results.apexScore / 100, 1);
     if (scoreRatio > 0) {
       drawGaugeArc(
         doc,
@@ -244,7 +327,7 @@ export default function ResultsDashboard({
     doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.text(String(results.disciplineScore), gaugeCx, gaugeCy + 2, {
+    doc.text(String(results.apexScore), gaugeCx, gaugeCy + 2, {
       align: "center",
     });
 
@@ -254,33 +337,33 @@ export default function ResultsDashboard({
     doc.setTextColor(160, 160, 160);
     doc.text("/ 100", gaugeCx, gaugeCy + 8, { align: "center" });
 
-    // Category label below gauge
+    // "Apex Status: [Tier Name]" below gauge
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
     doc.text(
-      results.disciplineCategory,
+      `Apex Status: ${results.apexCategory}`,
       gaugeCx,
       gaugeCy + gaugeRadius + 10,
       { align: "center" }
     );
 
-    // --- RIGHT: Portfolio at Retirement Bar Chart ---
+    // --- RIGHT: Corner Exit Projection ---
     doc.setFontSize(12);
     doc.setTextColor(15, 72, 127);
     doc.setFont("helvetica", "bold");
-    doc.text("Portfolio at Retirement", rightColX, colStartY);
+    doc.text("Corner Exit Projection\u2122", rightColX, colStartY);
 
     const chartY = colStartY + 10;
     const barMaxWidth = 55;
     const barHeight = 10;
     const maxPortfolio = Math.max(results.fvNoCar, results.fvWithCar);
 
-    // "Without Car" bar
+    // "Clean Exit Velocity" bar
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
-    doc.text("Without Car", rightColX, chartY);
+    doc.text("Clean Exit Velocity", rightColX, chartY);
     const noCarWidth = Math.max(
       2,
       (results.fvNoCar / maxPortfolio) * barMaxWidth
@@ -296,12 +379,12 @@ export default function ResultsDashboard({
       chartY + 9
     );
 
-    // "With Car" bar
+    // "Reduced Exit Velocity" bar
     const bar2Y = chartY + barHeight + 10;
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
-    doc.text("With Car", rightColX, bar2Y);
+    doc.text("Reduced Exit Velocity", rightColX, bar2Y);
     const withCarWidth = Math.max(
       2,
       (results.fvWithCar / maxPortfolio) * barMaxWidth
@@ -356,8 +439,8 @@ export default function ResultsDashboard({
         formatCurrency(results.fvAnnualCost),
       ],
       ["Total Opportunity Cost", formatCurrency(results.opportunityCost)],
-      ["Portfolio Without Car", formatCurrency(results.fvNoCar)],
-      ["Portfolio With Car", formatCurrency(results.fvWithCar)],
+      ["Clean Exit Velocity (No Car)", formatCurrency(results.fvNoCar)],
+      ["Reduced Exit Velocity (With Car)", formatCurrency(results.fvWithCar)],
       [
         "Car-to-Investable Assets",
         `${results.carToInvestablePercent.toFixed(1)}%`,
@@ -391,7 +474,7 @@ export default function ResultsDashboard({
     doc.setTextColor(160, 160, 160);
     doc.setFont("helvetica", "normal");
     doc.text(
-      "Generated by Performance Affordability Calculator",
+      "Generated by the APEX Financial Performance Engine\u2122",
       pageWidth / 2,
       y,
       { align: "center" }
@@ -427,8 +510,8 @@ export default function ResultsDashboard({
 
     // --- Personalized score-based paragraphs ---
     const displayName = firstName || "there";
-    const scorePct = results.disciplineScore;
-    const category = results.disciplineCategory;
+    const scorePct = results.apexScore;
+    const category = results.apexCategory;
     const carNW = results.carToNetWorthPercent.toFixed(1);
     const savRate = results.savingsRate.toFixed(1);
     const tac = formatCurrency(results.trueAnnualCost);
@@ -454,101 +537,112 @@ export default function ResultsDashboard({
 
     let p1: string, p2: string, p3: string, p4: string;
 
-    if (scorePct >= 85) {
+    if (scorePct >= 80) {
       p1 =
-        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category, the highest tier in our framework. ` +
-        `This exceptional result indicates that your performance vehicle purchase is very well aligned with your overall financial position. ` +
-        `You have demonstrated a rare balance between pursuing your automotive passion and maintaining strong financial discipline. ` +
-        `Very few enthusiasts achieve a score at this level, and it reflects both thoughtful planning and a solid foundation of wealth-building habits.`;
+        `${displayName}, your APEX Score of ${scorePct} out of 100 places you in the ${category} tier. ` +
+        `This is the highest classification in the APEX framework and signals that your vehicle purchase is running a clean line through your financial trajectory. ` +
+        `You have found the ideal balance between driving performance and financial performance. ` +
+        `Very few enthusiasts achieve this alignment, and it reflects precise planning and a well-built financial foundation.`;
 
       p2 =
-        `Your car-to-net-worth ratio of ${carNW}% is well within the 10% threshold commonly referenced in financial planning, meaning this vehicle represents a modest fraction of your total wealth. ` +
-        `Your current savings rate of ${savRate}% demonstrates that you are consistently setting aside a meaningful portion of your income for long-term growth. ` +
-        `The true annual cost of ownership is estimated at ${tac} when including depreciation, insurance, maintenance, and loan payments. This figure is comfortably absorbed by your financial profile without compromising your ability to invest and build wealth over time.`;
+        `Your car-to-net-worth ratio of ${carNW}% is well within the 10% benchmark, meaning this vehicle represents a proportional allocation of your total wealth. ` +
+        `Your current savings rate of ${savRate}% confirms that your financial momentum remains strong. ` +
+        `The true annual cost of ownership is estimated at ${tac} when including depreciation, insurance, maintenance, and loan payments. This figure is well within the carrying capacity of your financial profile and does not introduce meaningful drag on your wealth trajectory.`;
 
       p3 =
-        `Every major purchase carries an opportunity cost, and your vehicle is no exception. If the total cost of this car were invested instead, your portfolio at retirement could be ${fvNo} rather than ${fvWith}, a difference of ${fvDiff}. ` +
-        `However, your financial independence timeline is only delayed by approximately ${fiDelay} years, which is a modest trade-off for the enjoyment and utility this vehicle provides. ` +
-        `This minimal delay confirms that the purchase fits comfortably within your broader wealth-building plan.`;
+        `Every vehicle carries an opportunity cost. If the total cost of this car were deployed into investments instead, your corner exit projection would be ${fvNo} rather than ${fvWith}, a delta of ${fvDiff}. ` +
+        `However, your financial independence timeline shifts by only approximately ${fiDelay} years, a minimal adjustment that confirms this purchase is well within your performance envelope. ` +
+        `The exit velocity remains strong, and the trajectory holds its line.`;
 
       p4 =
-        `Continue doing exactly what you are doing, ${displayName}. Your financial habits are strong, and this purchase does not materially threaten your path to financial independence. ` +
-        `Focus on maintaining your savings rate, staying disciplined with ongoing vehicle costs such as maintenance and insurance, and reviewing your overall financial plan annually. ` +
-        `You have earned the right to enjoy this vehicle with confidence, knowing that your long-term financial future remains on a solid trajectory.`;
-    } else if (scorePct >= 70) {
+        `Continue holding your current line, ${displayName}. Your financial positioning is strong, and this purchase does not alter your long-term trajectory in any material way. ` +
+        `Focus on maintaining your savings rate, managing ongoing vehicle costs such as maintenance and insurance, and reviewing your financial plan annually to keep everything dialed in. ` +
+        `You have earned the right to enjoy this vehicle knowing your financial exit velocity remains on target.`;
+    } else if (scorePct >= 65) {
       p1 =
-        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
-        `This is a solid result that indicates your performance vehicle purchase is generally well-proportioned relative to your financial profile. ` +
-        `While the vehicle does represent a meaningful financial commitment, your overall savings habits and net worth provide a reasonable buffer. ` +
-        `You are balancing your enthusiasm for performance vehicles with responsible financial planning, though there is room to strengthen that balance further.`;
+        `${displayName}, your APEX Score of ${scorePct} out of 100 places you in the ${category} tier. ` +
+        `This is a solid result, indicating that your performance vehicle purchase is generally well-proportioned relative to your financial profile. ` +
+        `The vehicle represents a meaningful financial commitment, but your savings habits and net worth provide a reasonable buffer. ` +
+        `You are carrying speed through the corner, though minor line adjustments would improve your overall exit velocity.`;
 
       p2 =
-        `Your car-to-net-worth ratio sits at ${carNW}%, which means the vehicle represents a noticeable but not outsized portion of your overall wealth. ` +
-        `Your savings rate of ${savRate}% shows that you are directing income toward long-term growth, though increasing this figure would further strengthen your financial position. ` +
-        `The true annual cost of ownership comes to ${tac} when you factor in depreciation, insurance, maintenance, and financing costs. ` +
-        `This is a real expense that deserves ongoing attention in your annual budget to make sure it does not creep higher over time.`;
+        `Your car-to-net-worth ratio sits at ${carNW}%, which means the vehicle occupies a noticeable but manageable portion of your overall wealth. ` +
+        `Your savings rate of ${savRate}% shows forward momentum toward long-term growth, though increasing this figure would strengthen your financial positioning further. ` +
+        `The true annual cost of ownership comes to ${tac} when factoring in depreciation, insurance, maintenance, and financing. ` +
+        `This introduces moderate financial load factor that warrants ongoing attention in your annual budget to ensure it does not increase over time.`;
 
       p3 =
-        `The opportunity cost of this vehicle is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your retirement portfolio could reach ${fvNo} compared to the projected ${fvWith} with the vehicle, a gap of ${fvDiff}. ` +
-        `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable trade-off, it is significant enough to warrant monitoring your total vehicle costs each year and ensuring they remain within comfortable bounds as your financial situation evolves.`;
+        `The opportunity cost is worth understanding clearly. If the funds tied up in this purchase and its annual costs were invested instead, your corner exit projection would reach ${fvNo} compared to the projected ${fvWith} with the vehicle, a gap of ${fvDiff}. ` +
+        `This translates to a financial independence delay of roughly ${fiDelay} years. While this is a manageable delta, it is significant enough to warrant monitoring your total vehicle costs annually and ensuring they remain within comfortable parameters as your financial positioning evolves.`;
 
       p4 =
-        `Based on these results, it may be worth maintaining your current trajectory while looking for opportunities to optimize, ${displayName}. ` +
+        `Based on these results, maintaining your current trajectory while looking for optimization opportunities makes sense, ${displayName}. ` +
         `Consider setting a strict annual vehicle cost budget that includes maintenance, insurance, and any track or modification expenses. ` +
         `If possible, look for ways to increase your savings rate by even a few percentage points. Small improvements compound significantly over time. ` +
-        `You are in a good position overall, and a bit of extra financial discipline will help ensure this vehicle remains a source of enjoyment rather than financial stress.`;
+        `Your positioning is solid overall, and targeted adjustments will help ensure this vehicle remains a source of performance rather than compounding drag.`;
     } else if (scorePct >= 50) {
       p1 =
-        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
-        `This result signals that your performance vehicle purchase represents a significant financial commitment relative to your current means. ` +
-        `While your enthusiasm for this vehicle is understandable, the numbers indicate that the purchase is stretching your financial resources in ways that could meaningfully impact your long-term wealth-building goals. ` +
-        `This is not an uncommon situation among car enthusiasts, but it does require careful attention and potentially some adjustments to your plan.`;
+        `${displayName}, your APEX Score of ${scorePct} out of 100 places you in the ${category} tier. ` +
+        `This result indicates that you are entering the corner aggressively relative to your current financial position. ` +
+        `The vehicle represents a significant commitment that increases your financial load factor and could alter your long-term positioning if left unmanaged. ` +
+        `This is a common situation among performance enthusiasts, and the key is to understand the forces at play and adjust your line accordingly.`;
 
       p2 =
-        `Your car-to-net-worth ratio of ${carNW}% indicates that a substantial share of your wealth is concentrated in this single depreciating asset. ` +
-        `Your savings rate of ${savRate}% is being compressed by the costs of ownership, and the true annual cost of ${tac} (which accounts for depreciation, insurance, maintenance, and loan payments) is consuming a meaningful portion of your annual income. ` +
-        `These metrics suggest that the vehicle is competing directly with your ability to build long-term financial security through consistent investment contributions.`;
+        `Your car-to-net-worth ratio of ${carNW}% indicates that a substantial share of your wealth is allocated to this single depreciating asset. ` +
+        `Your savings rate of ${savRate}% is being compressed by the costs of ownership, and the true annual cost of ${tac} (including depreciation, insurance, maintenance, and loan payments) raises your financial center of gravity by consuming a meaningful portion of your annual income. ` +
+        `These metrics indicate the vehicle is competing directly with your ability to build long-term investment momentum.`;
 
       p3 =
-        `The opportunity cost paints a clear picture of the long-term trade-off. Without this vehicle, your projected retirement portfolio would be ${fvNo}, compared to ${fvWith} with it, a difference of ${fvDiff} in future wealth. ` +
-        `Your financial independence is delayed by approximately ${fiDelay} years as a direct result. This is a significant gap that grows larger with time due to the compounding nature of investment returns. ` +
-        `Every year of delay represents both lost portfolio growth and additional years of mandatory work before you can retire on your own terms.`;
+        `The opportunity cost reveals the long-term trade-off. Without this vehicle, your corner exit projection would be ${fvNo}, compared to ${fvWith} with it, a difference of ${fvDiff} in future wealth. ` +
+        `Your financial independence is delayed by approximately ${fiDelay} years as a direct result. This introduces compounding drag that grows larger with time. ` +
+        `Each year of delay reduces exit velocity and extends the mandatory work period before you can transition on your own terms.`;
 
       p4 =
-        `It may be worth taking a hard look at the total cost picture, ${displayName}. Consider whether a less expensive vehicle, a shorter hold period, or a larger down payment could bring your Discipline Score into a healthier range. ` +
-        `If this specific vehicle is important to you, focus on aggressively increasing your income or cutting other discretionary expenses to boost your savings rate. ` +
-        `Even modest improvements, like saving an extra few hundred dollars per month, can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to your original goal.`;
+        `It is worth evaluating the full cost picture, ${displayName}. Consider whether a different vehicle, a shorter hold period, or a larger down payment could improve your APEX Score and strengthen your financial positioning. ` +
+        `If this specific vehicle is important to you, focus on increasing your income or reducing other discretionary expenses to boost your savings rate. ` +
+        `Even modest adjustments, like redirecting a few hundred dollars per month, can meaningfully reduce the opportunity cost and bring your financial independence timeline closer to the original target.`;
     } else {
       p1 =
-        `${displayName}, your Discipline Score of ${scorePct} out of 100 places you in the ${category} category. ` +
-        `This is the most cautionary tier in our scoring framework, and it indicates that your performance vehicle purchase may be significantly overextending your current financial position. ` +
-        `We understand the emotional pull of a dream car, but the numbers suggest that this purchase, at this time, poses a real risk to your long-term financial health. ` +
-        `It is important to review these findings carefully and consider whether adjustments are needed before committing to this vehicle.`;
+        `${displayName}, your APEX Score of ${scorePct} out of 100 places you in the ${category} tier. ` +
+        `This indicates that you are carrying significantly more speed into this financial corner than your current positioning supports. ` +
+        `The enthusiasm behind this purchase is understood, but the data shows that it introduces substantial load on your financial trajectory and alters your long-term positioning in ways that deserve careful review. ` +
+        `This is an important moment to evaluate the numbers and consider adjustments before committing fully.`;
 
       p2 =
-        `The financial metrics raise several concerns. Your car-to-net-worth ratio of ${carNW}% is well above the 10% threshold commonly referenced in financial planning, meaning a disproportionate share of your wealth is tied up in a rapidly depreciating asset. ` +
+        `The financial metrics paint a clear picture. Your car-to-net-worth ratio of ${carNW}% is well above the 10% benchmark, meaning a significant portion of your wealth is concentrated in a depreciating asset. ` +
         `Your savings rate has been reduced to ${savRate}%, which limits your ability to build the investment portfolio needed for financial independence. ` +
-        `The true annual cost of ${tac} (including depreciation, insurance, maintenance, and loan payments) is consuming a large portion of your annual income and crowding out funds that could be directed toward savings and investments.`;
+        `The true annual cost of ${tac} (including depreciation, insurance, maintenance, and loan payments) raises your financial center of gravity considerably and introduces compounding drag on funds that could otherwise be directed toward wealth-building.`;
 
       p3 =
-        `The long-term financial impact is substantial. Without this vehicle, your projected retirement portfolio would be ${fvNo}, but with the vehicle it drops to ${fvWith}, a reduction of ${fvDiff} in lifetime wealth. ` +
-        `Your path to financial independence is delayed by approximately ${fiDelay} years. This means additional years of mandatory work, reduced financial flexibility, and a significantly smaller safety net for unexpected life events. ` +
-        `The compounding effect of these lost investment years cannot easily be recovered once the time has passed.`;
+        `The long-term trajectory shift is significant. Without this vehicle, your corner exit projection would be ${fvNo}, but with the vehicle it drops to ${fvWith}, a reduction of ${fvDiff} in lifetime wealth. ` +
+        `Your path to financial independence is delayed by approximately ${fiDelay} years. This extends your mandatory work timeline, reduces exit velocity, and narrows the margin available for unexpected life events. ` +
+        `The compounding effect of these deferred investment years is difficult to recover once the window has passed.`;
 
       p4 =
-        `The data suggests it may be prudent to reassess this purchase, ${displayName}. Consider more affordable alternatives that still deliver an engaging driving experience but at a fraction of the total cost. ` +
-        `If you are already committed to this vehicle, explore ways to offset the financial impact by increasing your income, dramatically reducing other expenses, or shortening your ownership period to minimize depreciation losses. ` +
-        `The goal is not to abandon your passion for performance vehicles, but to ensure that your pursuit of that passion does not come at the expense of your financial freedom and long-term security.`;
+        `The data suggests it may be worth reconsidering the approach, ${displayName}. Evaluate alternative vehicles that still deliver an engaging driving experience but at a lower total cost of ownership. ` +
+        `If you are already committed to this vehicle, explore ways to offset the financial load by increasing your income, reducing other expenses significantly, or shortening the ownership period to limit depreciation exposure. ` +
+        `The goal is not to park your passion for performance, but to ensure the line you are running does not carry you off the financial track entirely. Strategic repositioning now protects your long-term exit velocity.`;
     }
 
-    renderSection("Your Discipline Score", p1);
+    renderSection("Your APEX Score\u2122", p1);
     renderSection("Your Financial Snapshot", p2);
     renderSection("The Long-Term Impact", p3);
     renderSection("Considerations", p4);
+
+    // --- Signature Closing Statement ---
+    y += 2;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bolditalic");
+    doc.setTextColor(15, 72, 127);
+    doc.text("Performance is not the problem. Poor positioning is.", pageWidth / 2, y, {
+      align: "center",
+    });
+    y += 10;
+
     renderSection(
       "Disclaimer",
       "Modern Wealth does not offer tax, legal, or accounting advice. The information provided here is purely for your understanding and should not be used as a basis for these topics. " +
-        "This Performance Affordability Report does not constitute any financial, tax, or legal advice. The Performance Affordability Report is for information purposes only. " +
+        "This APEX Report does not constitute any financial, tax, or legal advice. The APEX Report is for information purposes only. " +
         "Consult with your tax, legal, and accounting advisors before acting on any advice or initiating any transaction."
     );
 
@@ -561,7 +655,7 @@ export default function ResultsDashboard({
     doc.setTextColor(160, 160, 160);
     doc.setFont("helvetica", "normal");
     doc.text(
-      "Generated by Performance Affordability Calculator",
+      "Generated by the APEX Financial Performance Engine\u2122",
       pageWidth / 2,
       footer2Y,
       { align: "center" }
@@ -604,8 +698,8 @@ export default function ResultsDashboard({
 
     const glossary: [string, string][] = [
       [
-        "Discipline Score",
-        "A composite rating from 0 to 100 that evaluates how well a vehicle purchase aligns with your overall financial health, based on net worth ratios, savings rate, FI delay, and investable asset ratios.",
+        "APEX Score\u2122",
+        "A composite performance metric evaluating how effectively a vehicle purchase aligns with your financial trajectory across Affordability, Positioning, Efficiency, and Execution.",
       ],
       [
         "FI Number (4% Rule)",
@@ -645,27 +739,27 @@ export default function ResultsDashboard({
       ],
       [
         "Total Opportunity Cost",
-        "The combined opportunity cost of both the initial purchase and ongoing annual expenses, representing the total wealth you forgo by owning this vehicle.",
+        "The combined opportunity cost of both the initial purchase and ongoing annual expenses, representing the total wealth delta from owning this vehicle.",
       ],
       [
-        "Portfolio Without Car",
+        "Clean Exit Velocity",
         "Your projected investment portfolio at retirement if you did not purchase this vehicle and invested all savings at your expected return.",
       ],
       [
-        "Portfolio With Car",
+        "Reduced Exit Velocity",
         "Your projected investment portfolio at retirement after accounting for all vehicle-related costs reducing your annual savings.",
       ],
       [
         "Car-to-Net-Worth",
-        "The vehicle purchase price expressed as a percentage of your total net worth. A common financial planning benchmark is to keep this below 10%.",
+        "The vehicle purchase price expressed as a percentage of your total net worth. A common benchmark is to keep this below 10%.",
       ],
       [
         "Car-to-Investable Assets",
-        "The vehicle purchase price as a percentage of your liquid investable assets, showing how much of your investment capital the car represents.",
+        "The vehicle purchase price as a percentage of your liquid investable assets, indicating how much of your investment capital the car represents.",
       ],
       [
         "Savings Rate",
-        "Your annual savings as a percentage of your gross annual income. A rate of 25% or higher is generally considered excellent for long-term wealth building.",
+        "Your annual savings as a percentage of your gross annual income. A rate of 25% or higher is generally considered strong for long-term wealth building.",
       ],
       [
         "FI Delay",
@@ -697,14 +791,53 @@ export default function ResultsDashboard({
     doc.setTextColor(160, 160, 160);
     doc.setFont("helvetica", "normal");
     doc.text(
-      "Generated by Performance Affordability Calculator",
+      "Generated by the APEX Financial Performance Engine\u2122",
       pageWidth / 2,
       footer3Y,
       { align: "center" }
     );
 
-    doc.save("performance-affordability-report.pdf");
+    doc.save("apex-report.pdf");
   }, [results, firstName, lastName, email, vehicleLabel]);
+
+  // Derive Wealth Stage and Liquidity Stress for UI display
+  const carNWPct = results.carToNetWorthPercent;
+  const carInvPct = results.carToInvestablePercent;
+  let wealthStage: string;
+  if (carNWPct <= 5 && carInvPct <= 10) wealthStage = "Established";
+  else if (carNWPct <= 15 && carInvPct <= 25) wealthStage = "Building";
+  else if (carNWPct <= 30 && carInvPct <= 50) wealthStage = "Early Stage";
+  else wealthStage = "Pre-Foundation";
+
+  const savRateVal = results.savingsRate;
+  let liquidityStress: string;
+  if (savRateVal >= 25) liquidityStress = "Low";
+  else if (savRateVal >= 15) liquidityStress = "Moderate";
+  else if (savRateVal >= 5) liquidityStress = "Elevated";
+  else liquidityStress = "High";
+
+  const apexScore = results.apexScore;
+  let executionRecs: string[];
+  if (apexScore < 50) {
+    executionRecs = [
+      "Recommend ownership restructuring to reduce financial load factor",
+      "Recommend hold period reduction to limit compounding drag",
+      "Recommend financing optimization to lower annual cost of carry",
+      "Evaluate alternative vehicle scenarios to improve trajectory alignment",
+    ];
+  } else if (apexScore <= 75) {
+    executionRecs = [
+      "Continue monitoring current cost-to-income positioning",
+      "Implement targeted savings offsets to counterbalance vehicle expenses",
+      "Consider depreciation mitigation strategy (shorter hold, higher resale retention)",
+    ];
+  } else {
+    executionRecs = [
+      "Purchase is well-aligned with current financial trajectory",
+      "Optional: explore prepayment acceleration to reduce total interest load",
+      "Optional: redirect depreciation savings toward tax-advantaged accounts",
+    ];
+  }
 
   return (
     <div className="space-y-8">
@@ -728,7 +861,7 @@ export default function ResultsDashboard({
               d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          Download PDF
+          Download APEX Report
         </button>
       </div>
 
@@ -740,54 +873,135 @@ export default function ResultsDashboard({
         </div>
       )}
 
-      {/* Top metric cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          label="Car-to-Net-Worth"
-          value={`${results.carToNetWorthPercent.toFixed(1)}%`}
-          sub={
-            results.carToNetWorthPercent <= 10
-              ? "Within target range"
-              : "Above target range"
-          }
-        />
-        <StatCard
-          label="True Annual Cost"
-          value={formatCurrency(results.trueAnnualCost)}
-          sub="Including depreciation & opportunity"
-          accent
-        />
-        <StatCard
-          label="FI Delay"
-          value={`${results.fiDelayYears.toFixed(1)} years`}
-          sub={`${results.yearsToFiNoCar}yr → ${results.yearsToFiWithCar}yr to FI`}
-        />
-        <StatCard
-          label="Savings Rate"
-          value={`${results.savingsRate.toFixed(1)}%`}
-          sub={
-            results.savingsRate >= 25
-              ? "Excellent savings rate"
-              : "Consider increasing savings"
-          }
-        />
+      {/* A — Affordability */}
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0f487f] mb-3">
+          A &mdash; Affordability
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard
+            label="Car-to-Net-Worth"
+            value={`${results.carToNetWorthPercent.toFixed(1)}%`}
+            sub={
+              results.carToNetWorthPercent <= 10
+                ? "Within target range"
+                : "Above target range"
+            }
+          />
+          <StatCard
+            label="True Annual Cost"
+            value={formatCurrency(results.trueAnnualCost)}
+            sub="Including depreciation & financing"
+            accent
+          />
+          <StatCard
+            label="Savings Rate"
+            value={`${results.savingsRate.toFixed(1)}%`}
+            sub={
+              results.savingsRate >= 25
+                ? "Strong savings rate"
+                : "Consider increasing savings"
+            }
+          />
+          <StatCard
+            label="FI Delay"
+            value={`${results.fiDelayYears.toFixed(1)} years`}
+            sub={`${results.yearsToFiNoCar}yr \u2192 ${results.yearsToFiWithCar}yr to FI`}
+          />
+        </div>
+      </div>
+
+      {/* P — Positioning */}
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0f487f] mb-3">
+          P &mdash; Positioning
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <StatCard
+            label="Car-to-Investable Assets"
+            value={`${results.carToInvestablePercent.toFixed(1)}%`}
+            sub="Purchase vs. liquid investments"
+          />
+          <StatCard
+            label="Wealth Stage Indicator"
+            value={wealthStage}
+            sub="Derived from asset ratios"
+          />
+          <StatCard
+            label="Liquidity Stress Indicator"
+            value={liquidityStress}
+            sub="Impact on savings capacity"
+          />
+        </div>
+      </div>
+
+      {/* E — Efficiency */}
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0f487f] mb-3">
+          E &mdash; Efficiency
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard
+            label="Annual Depreciation"
+            value={formatCurrency(results.annualDepreciation)}
+            sub="Yearly value reduction"
+          />
+          <StatCard
+            label="Opp. Cost of Purchase"
+            value={formatCurrency(results.fvPurchase)}
+            sub="If invested instead"
+            accent
+          />
+          <StatCard
+            label="Opp. Cost of Annual Expenses"
+            value={formatCurrency(results.fvAnnualCost)}
+            sub="Annual costs compounded"
+            accent
+          />
+          <StatCard
+            label="Total Opportunity Cost"
+            value={formatCurrency(results.opportunityCost)}
+            sub="Combined wealth delta"
+            accent
+          />
+        </div>
+      </div>
+
+      {/* X — Execution */}
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0f487f] mb-3">
+          X &mdash; Execution
+        </h3>
+        <div className="glass-panel card-hover p-6">
+          <ul className="space-y-2">
+            {executionRecs.map((rec, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0f487f] mt-1.5 flex-shrink-0" />
+                {rec}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* Score + Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-panel card-hover p-6 flex flex-col items-center justify-center">
           <h3 className="text-lg font-semibold mb-2 text-gray-600">
-            Discipline Score
+            APEX Score&trade;
           </h3>
           <ScoreGauge
-            score={results.disciplineScore}
-            category={results.disciplineCategory}
+            score={results.apexScore}
+            category={results.apexCategory}
           />
+          <div className="mt-2 text-sm font-medium text-gray-500">
+            Apex Status: <span className="font-bold text-gray-700">{results.apexCategory}</span>
+          </div>
         </div>
 
         <div className="glass-panel card-hover p-6">
           <h3 className="text-lg font-semibold mb-2 text-gray-600">
-            Portfolio at Retirement
+            Corner Exit Projection&trade;
           </h3>
           <ComparisonChart
             fvNoCar={results.fvNoCar}
@@ -841,11 +1055,11 @@ export default function ResultsDashboard({
             highlight
           />
           <Detail
-            label="Portfolio Without Car"
+            label="Clean Exit Velocity"
             value={formatCurrency(results.fvNoCar)}
           />
           <Detail
-            label="Portfolio With Car"
+            label="Reduced Exit Velocity"
             value={formatCurrency(results.fvWithCar)}
           />
           <Detail

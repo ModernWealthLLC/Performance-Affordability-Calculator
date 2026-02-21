@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Performance Affordability Calculator",
-  description: "Can you really afford that performance car?",
+  title: "The APEX Report\u2122 | APEX Financial Performance Engine",
+  description: "Are you hitting the financial apex? Affordability, Positioning, Efficiency, eXecution.",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
         <header className="border-b border-[#cfcfcf] bg-white sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="Performance Affordability" className="h-8" />
+            <img src="/logo.png" alt="APEX Financial Performance Engine" className="h-8" />
           </div>
         </header>
         <main className="max-w-6xl mx-auto px-6 py-10">{children}</main>

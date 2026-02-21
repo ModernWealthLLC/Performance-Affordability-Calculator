@@ -36,8 +36,8 @@ export interface CalculationResults {
   fvNoCar: number;
   fvWithCar: number;
   fiDelayYears: number;
-  disciplineScore: number;
-  disciplineCategory: string;
+  apexScore: number;
+  apexCategory: string;
   carToNetWorthPercent: number;
   savingsRate: number;
   carToInvestablePercent: number;
@@ -204,14 +204,14 @@ export function calculate(
     [Infinity, 5],
   ]);
 
-  const disciplineScore =
+  const apexScore =
     scoreNetWorth + savingsScore + scoreFiDelay + scoreInvestable;
 
-  let disciplineCategory: string;
-  if (disciplineScore >= 85) disciplineCategory = "Elite Discipline";
-  else if (disciplineScore >= 70) disciplineCategory = "Controlled Enthusiast";
-  else if (disciplineScore >= 50) disciplineCategory = "Aggressive";
-  else disciplineCategory = "Lifestyle Risk";
+  let apexCategory: string;
+  if (apexScore >= 80) apexCategory = "Clean Line";
+  else if (apexScore >= 65) apexCategory = "Late Apex";
+  else if (apexScore >= 50) apexCategory = "Early Apex";
+  else apexCategory = "Financial Oversteer";
 
   return {
     fiNumber,
@@ -228,8 +228,8 @@ export function calculate(
     fvNoCar,
     fvWithCar,
     fiDelayYears,
-    disciplineScore,
-    disciplineCategory,
+    apexScore,
+    apexCategory,
     carToNetWorthPercent,
     savingsRate,
     carToInvestablePercent,

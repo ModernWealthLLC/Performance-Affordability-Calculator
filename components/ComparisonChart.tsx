@@ -45,8 +45,8 @@ export default function ComparisonChart({
   fvWithCar,
 }: ComparisonChartProps) {
   const data = [
-    { name: "Without Car", value: fvNoCar },
-    { name: "With Car", value: fvWithCar },
+    { name: "Clean Exit Velocity", value: fvNoCar },
+    { name: "Reduced Exit Velocity", value: fvWithCar },
   ];
 
   const colors = ["#22c55e", "#ef4444"];

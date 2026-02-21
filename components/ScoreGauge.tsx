@@ -39,8 +39,8 @@ export default function ScoreGauge({ score, category }: ScoreGaugeProps) {
   const arcPath = `M ${arcStart.x} ${arcStart.y} A ${radius} ${radius} 0 ${largeArc} 1 ${arcEnd.x} ${arcEnd.y}`;
 
   let color: string;
-  if (score >= 85) color = "#22c55e";
-  else if (score >= 70) color = "#3b82f6";
+  if (score >= 80) color = "#22c55e";
+  else if (score >= 65) color = "#3b82f6";
   else if (score >= 50) color = "#f59e0b";
   else color = "#ef4444";
 
